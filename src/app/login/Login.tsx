@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, Key, PawPrint } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
 import { z } from "zod";
 
 // Login form schema
@@ -116,7 +116,7 @@ const Login = () => {
                 />
                 
                 <div className="text-right">
-                  <Link to="/forgot-password" className="text-sm text-ong-teal hover:underline">
+                  <Link href="/forgot-password" className="text-sm text-ong-teal hover:underline">
                     Esqueceu sua senha?
                   </Link>
                 </div>
@@ -132,7 +132,7 @@ const Login = () => {
                 <div className="text-center mt-6">
                   <p className="text-gray-600">
                     Não tem uma conta?{" "}
-                    <Link to="/register" className="text-ong-teal hover:underline">
+                    <Link href="/register" className="text-ong-teal hover:underline">
                       Cadastre-se
                     </Link>
                   </p>
