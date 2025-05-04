@@ -1,7 +1,7 @@
 
+import Link from 'next/link';
 import { CiHeart } from "react-icons/ci";
 import { SiFacebook, SiInstagram, SiMailboxdotorg, SiWhatsapp } from 'react-icons/si';
-import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -30,7 +30,7 @@ const Footer = () => {
             <h3 className="font-heading text-xl mb-4">Links Úteis</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/animals" className="text-gray-300 hover:text-ong-teal transition-colors">
+                <Link href="/animais" className="text-gray-300 hover:text-ong-teal transition-colors">
                   Animais para Adoção
                 </Link>
               </li>

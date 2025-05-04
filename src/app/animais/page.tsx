@@ -1,3 +1,4 @@
+"use client"
 import AnimalCard, { AnimalProps } from '@/components/AnimalCard';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
@@ -117,25 +118,20 @@ const Animals = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [includeAdopted, setIncludeAdopted] = useState(false);
   
-  // Filtrar animais com base nos critérios
   const filteredAnimals = animalsList.filter((animal) => {
-    // Filtro por termo de busca
+
     const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (animal.breed && animal.breed.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    // Filtro por tipo de animal
     const matchesType = animalType === 'all' || animal.type === animalType;
     
-    // Filtro por tamanho
     const matchesSize = animalSize === 'all' || animal.size === animalSize;
     
-    // Filtro por status de adoção
     const matchesAdoptionStatus = includeAdopted || !animal.isAdopted;
     
     return matchesSearch && matchesType && matchesSize && matchesAdoptionStatus;
   });
 
-  // Reset de todos os filtros
   const resetFilters = () => {
     setSearchTerm('');
     setAnimalType('all');
@@ -148,7 +144,7 @@ const Animals = () => {
       <Navbar />
       
       <main className="flex-grow bg-ong-light">
-        {/* Header */}
+
         <section className="bg-orange-400 text-white py-10">
           <div className="container mx-auto px-4">
             <h1 className="text-3xl font-bold">Animais para adoção</h1>
@@ -156,7 +152,6 @@ const Animals = () => {
           </div>
         </section>
         
-        {/* Filtros e Busca */}
         <section className="container mx-auto px-4 py-6">
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex flex-col sm:flex-row gap-4">
@@ -181,7 +176,6 @@ const Animals = () => {
               </Button>
             </div>
             
-            {/* Área de filtros expansível */}
             {showFilters && (
               <div className="mt-4 pt-4 border-t animate-fade-in">
                 <div className="flex flex-wrap gap-4">
@@ -195,7 +189,6 @@ const Animals = () => {
                       <option value="all">Todos</option>
                       <option value="dog">Cachorros</option>
                       <option value="cat">Gatos</option>
-                      <option value="bird">Aves</option>
                       <option value="other">Outros</option>
                     </select>
                   </div>
@@ -235,7 +228,6 @@ const Animals = () => {
               </div>
             )}
             
-            {/* Filtros ativos */}
             {(searchTerm || animalType !== 'all' || animalSize !== 'all' || includeAdopted) && (
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="text-sm text-gray-500">Filtros ativos:</span>
@@ -292,7 +284,6 @@ const Animals = () => {
           </div>
         </section>
         
-        {/* Resultados */}
         <section className="container mx-auto px-4 pb-16">
           <div className="mb-6">
             <h2 className="text-lg font-medium">

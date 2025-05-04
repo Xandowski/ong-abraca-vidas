@@ -4,7 +4,6 @@ ONG protetora dos animais.
 
 ## Tecnologias do projeto
 
-[![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
 [![Shadcn UI](https://img.shields.io/badge/shadcn%20ui-161618.svg?style=for-the-badge&logo=shadcnui&logoColor=white)](https://ui.shadcn.com/)
 [![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)

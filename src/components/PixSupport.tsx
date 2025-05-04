@@ -1,6 +1,7 @@
 // components/PixSupport.tsx
 'use client';
 
+import { Button } from '@/components/ui/button';
 import * as Dialog from '@radix-ui/react-dialog';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -26,9 +27,9 @@ export default function PixSupport() {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl">
-          💚 Apoiar via Pix
-        </button>
+        <Button size='lg' className="bg-green-500 hover:bg-green-600 text-white font-bold w-28">
+          Apoiar via Pix
+        </Button>
       </Dialog.Trigger>
 
       <Dialog.Portal>

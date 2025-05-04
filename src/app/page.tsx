@@ -1,11 +1,11 @@
-
+"use client"
 import AnimalCard, { AnimalProps } from '@/components/AnimalCard';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PixSupport from '@/components/PixSupport';
 import { Button } from '@/components/ui/button';
 import { Heart, PawPrint, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // Dados mockados para exemplo
 const featuredAnimals: AnimalProps[] = [
@@ -65,7 +65,7 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hero Section */}
+
         <section className="bg-orange-400 text-white py-16 md:py-24">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
@@ -76,16 +76,15 @@ const Index = () => {
               Adote, não compre!
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/animals">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="/animais">
                 <Button size="lg" className="bg-white font-bold text-ong-teal hover:bg-gray-100">
-                  ADOTAR
+                  Adotar
                 </Button>
               </Link>
               <PixSupport />
             </div>
             
-            {/* Busca simplificada */}
             <div className="mt-10 max-w-xl mx-auto bg-white rounded-full p-1 flex items-center shadow-lg">
               <input
                 type="text"
@@ -105,7 +104,7 @@ const Index = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-ong-dark">
                 Animais em Destaque
               </h2>
-              <Link to="/animals" className="text-ong-teal font-medium hover:underline">
+              <Link href="/animais" className="text-ong-teal font-medium hover:underline">
                 Ver todos →
               </Link>
             </div>
