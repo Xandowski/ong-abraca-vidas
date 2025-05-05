@@ -1,19 +1,29 @@
 
-
 import { Button } from '@/components/ui/button';
-import { Menu, PlusCircle, X } from 'lucide-react';
+import { supabase } from "@/lib/supabase";
+import { useSession } from '@supabase/auth-helpers-react';
+import { LogOut, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PixSupport from './PixSupport';
 
 const isOngAdmin = false;
 
 const Navbar = () => {
+  const session = useSession();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+
+  console.log("Session atual:", session);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
@@ -33,25 +43,21 @@ const Navbar = () => {
           <a href="/#contact" className="text-gray-700 hover:text-ong-teal transition-colors">
             Contato
           </a>
+          
           {!isHomePage && (
             <PixSupport />
           )}
-          <div className="flex gap-2">
 
-            {isOngAdmin && !isHomePage && (
-              <Button 
-                size="sm" 
-                className="bg-ong-orange hover:bg-orange-500 flex items-center gap-1"
-                asChild
-              >
-                <Link href="/ong/dashboard">
-                  <PlusCircle className="h-4 w-4" />
-                  Cadastrar Animal
-                </Link>
-              </Button>
-            )}
-
-          </div>
+        {session && (
+          <Button 
+          variant="ghost" 
+          size="lg" 
+          className="w-14 hover:bg-transparent hover:text-red-500"
+          onClick={handleLogout}
+        >
+          <LogOut  className='hover:cursor-pointer'/> Sair
+        </Button>  
+        )}
         </div>
 
         <button 
@@ -86,34 +92,18 @@ const Navbar = () => {
             >
               Contato
             </a>
-            
+            {session && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="w-14"
+                onClick={handleLogout}
+              >
+                <LogOut  className='hover:cursor-pointer'/> Sair
+              </Button> 
+            )}
             <div className="flex flex-col gap-2 pt-2">
 
-              {isOngAdmin && !isHomePage && (
-                <Button 
-                  size="sm" 
-                  className="bg-ong-orange hover:bg-orange-500 flex items-center justify-center gap-1"
-                  asChild
-                >
-                  <Link href="/ong/dashboard" onClick={() => setIsMenuOpen(false)}>
-                    <PlusCircle className="h-4 w-4" />
-                    Cadastrar Animal
-                  </Link>
-                </Button>
-              )}
-              
-              {/* <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex items-center justify-center gap-1"
-                asChild
-              >
-                <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                  <LogIn className="h-4 w-4" />
-                  Entrar
-                </Link>
-              </Button> */}
-              
               {!isHomePage && (
                 <PixSupport />
               )}

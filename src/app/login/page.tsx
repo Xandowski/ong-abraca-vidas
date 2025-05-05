@@ -1,3 +1,8 @@
+'use client';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
@@ -6,19 +11,23 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AtSign, Key, PawPrint } from 'lucide-react';
+import { AtSign, Key } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// Login form schema
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 const formSchema = z.object({
   email: z.string().email({ message: "E-mail inválido." }),
   password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres." }),
 });
 
 const Login = () => {
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,16 +41,46 @@ const Login = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    // Here you would typically authenticate with a backend
+
     try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
       
-      // For demo purposes, just show a success toast
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro ao fazer login",
+          description: error.message,
+        });
+        setIsLoading(false);
+        return;
+      }
+  
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+  
+      if (profileError || profile?.role !== "admin") {
+        toast({
+          variant: "destructive",
+          title: "Acesso negado",
+          description: "Apenas administradores podem acessar esta área.",
+        });
+        await supabase.auth.signOut();
+        setIsLoading(false);
+        return;
+      }
+
       toast({
         title: "Login realizado com sucesso!",
         description: "Redirecionando...",
       });
+
+      router.push("/dashboard");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -61,8 +100,8 @@ const Login = () => {
         <div className="w-full max-w-md px-4">
           <div className="bg-white rounded-lg shadow-md p-8">
             <div className="text-center mb-6">
-              <div className="inline-flex rounded-full bg-ong-gray p-3 mb-4">
-                <PawPrint className="h-8 w-8 text-ong-teal" />
+              <div className="inline-flex rounded-full p-3 mb-4">
+                <Image src="/logo.svg" alt="logo" width={40} height={40}/>
               </div>
               <h1 className="text-2xl font-bold text-ong-dark">Bem-vindo de volta</h1>
               <p className="text-gray-600 mt-1">Faça login para continuar</p>
@@ -130,12 +169,12 @@ const Login = () => {
                 </Button>
                 
                 <div className="text-center mt-6">
-                  <p className="text-gray-600">
+                  {/* <p className="text-gray-600">
                     Não tem uma conta?{" "}
                     <Link href="/register" className="text-ong-teal hover:underline">
                       Cadastre-se
                     </Link>
-                  </p>
+                  </p> */}
                 </div>
               </form>
             </Form>

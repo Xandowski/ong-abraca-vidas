@@ -1,6 +1,9 @@
-import type { Metadata } from 'next'
-import { ClientProviders } from '../components/ClientProviders'
-import '../global.css'
+import { SupabaseProvider } from '@/components/SupabaseProvider';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { ClientProviders } from '../components/ClientProviders';
+import '../global.css';
 
 export const metadata: Metadata = {
   title: 'Abraca Vidas',
@@ -15,7 +18,11 @@ export const metadata: Metadata = {
 }
 
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookiesStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookiesStore });
+  const { data: { session } } = await supabase.auth.getSession();
+
   return (
     <html lang="pt-BR">
       <head>
@@ -26,11 +33,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" 
               content="width=device-width, initial-scale=1, viewport-fit=cover" 
       />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body>
-        <ClientProviders>{children}</ClientProviders>
+        <SupabaseProvider initialSession={session}>
+          <ClientProviders>{children}</ClientProviders>
+        </SupabaseProvider>
       </body>
     </html>
   )

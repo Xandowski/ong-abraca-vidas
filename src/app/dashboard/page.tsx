@@ -1,4 +1,5 @@
 
+'use client'
 import AnimalCard, { AnimalProps } from '@/components/AnimalCard';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
@@ -6,24 +7,26 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSession } from "@supabase/auth-helpers-react";
 import {
-    Check,
-    LayoutGrid,
-    List,
-    MoreVertical,
-    PawPrint,
-    Pencil,
-    PlusCircle,
-    Search,
-    Trash2
+  Check,
+  LayoutGrid,
+  List,
+  MoreVertical,
+  PawPrint,
+  Pencil,
+  PlusCircle,
+  Search,
+  Trash2
 } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // Dados mockados para exemplo
 const ongAnimals: AnimalProps[] = [
@@ -85,12 +88,24 @@ const ongAnimals: AnimalProps[] = [
 ];
 
 const OngDashboard = () => {
+  const session = useSession();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'adopted'>('all');
   const [isAddAnimalOpen, setIsAddAnimalOpen] = useState(false);
   
-  // Filtrar animais com base nos critérios
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [router, session]);
+
+  if (!session) {
+    return <p>Carregando...</p>;
+  }
+
+
   const filteredAnimals = ongAnimals.filter((animal) => {
     // Filtro por termo de busca
     const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -110,7 +125,7 @@ const OngDashboard = () => {
       <Navbar />
       
       <main className="flex-grow bg-ong-light">
-        {/* Header */}
+
         <section className="bg-ong-dark text-white py-6">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -365,8 +380,7 @@ const OngDashboard = () => {
             </Tabs>
           </div>
         </section>
-        
-        {/* Dialog de Adicionar Animal */}
+
         <Dialog open={isAddAnimalOpen} onOpenChange={setIsAddAnimalOpen}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
