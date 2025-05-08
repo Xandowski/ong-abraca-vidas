@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useSession } from '@supabase/auth-helpers-react';
 import { LogOut, Menu, X } from 'lucide-react';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import PixSupport from './PixSupport';
 const isOngAdmin = false;
 
 const Navbar = () => {
+  const supabase = createClientComponentClient();
   const session = useSession();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

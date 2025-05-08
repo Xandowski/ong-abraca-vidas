@@ -4,8 +4,15 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PixSupport from '@/components/PixSupport';
 import { Button } from '@/components/ui/button';
+import { useSession } from '@supabase/auth-helpers-react';
 import { Heart, PawPrint, Search } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+interface NavigatorStandalone extends Navigator {
+  standalone?: boolean;
+}
 
 // Dados mockados para exemplo
 const featuredAnimals: AnimalProps[] = [
@@ -60,6 +67,33 @@ const featuredAnimals: AnimalProps[] = [
 ];
 
 const Index = () => {
+  const session = useSession();
+  const router = useRouter();
+  const [checking, setChecking] = useState(true);
+    
+  useEffect(() => {
+    const checkStandalone = async () => {
+      const nav = navigator as NavigatorStandalone;
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || nav.standalone;
+      
+      if (isStandalone && !session) {
+        router.push('/login');
+      } else {
+        setChecking(false);
+      }
+    };
+
+    checkStandalone();
+  }, [router, session]);
+
+  if (checking) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-blue-500" />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />

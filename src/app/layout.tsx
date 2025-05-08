@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const cookiesStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookiesStore });
   const { data: { session } } = await supabase.auth.getSession();
-
+    
   return (
     <html lang="pt-BR">
       <head>

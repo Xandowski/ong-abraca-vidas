@@ -1,8 +1,4 @@
 'use client';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
@@ -11,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AtSign, Key } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,14 +16,13 @@ import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const formSchema = z.object({
   email: z.string().email({ message: "E-mail inválido." }),
   password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres." }),
 });
 
 const Login = () => {
+  const supabase = createClientComponentClient(); 
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
