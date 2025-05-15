@@ -10,22 +10,20 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
+import { Animal } from '@/types/database';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Heart, Images, Info } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Uploadzone from './Uploadzone';
 
-export interface AnimalProps {
-  id: number;
-  name: string;
-  type: 'cat' | 'dog' | 'bird' | 'other';
-  breed?: string;
-  age: string;
-  gender: 'male' | 'female';
-  size: 'small' | 'medium' | 'large';
-  imageUrl: string;
+export type AnimalProps = Omit<Animal, 'created_at' | 'image_url' | 'is_adopted'> & {
   isAdopted: boolean;
-  description?: string;
-  // Add more photos for the carousel
-  additionalImages?: string[];
+  isAuthenticated?: boolean;
+  setUploading?: (uploading: boolean) => void;
+  uploading?: boolean;
+  uploadProgress?: number;
+  setUploadProgress?: (progress: number) => void;
 }
 
 const AnimalCard: React.FC<AnimalProps> = ({
@@ -39,32 +37,140 @@ const AnimalCard: React.FC<AnimalProps> = ({
   imageUrl,
   isAdopted,
   description = "Este animal está aguardando um lar amoroso. Entre em contato com a ONG para mais informações sobre o processo de adoção.",
-  additionalImages = []
+  isAuthenticated = false,
+  setUploading,
+  setUploadProgress,
+  uploadProgress,
+  uploading,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
-  
-  // Combine primary image with additional images for the carousel
-  const allImages = [imageUrl, ...additionalImages].filter(Boolean);
-  
-  // If no additional images provided, use some placeholders for the carousel
-  const carouselImages = allImages.length > 1 ? allImages : [
-    imageUrl,
-    'https://images.unsplash.com/photo-1582562124811-c09040d0a901',
-    'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1'
-  ];
+  const [isEditAnimalOpen, setIsEditAnimalOpen] = useState(false);
+  const supabase = createClientComponentClient();
+  const { toast } = useToast();
+  const [nameUpdated, setNameUpdated] = useState(name);
+  const [typeUpdated, setTypeUpdated] = useState(type);
+  const [genderUpdated, setGenderUpdated] = useState(gender);
+  const [sizeUpdated, setSizeUpdated] = useState(size);
+  const [descriptionUpdated, setDescriptionUpdated] = useState(description);
+  const [ageUpdated, setAgeUpdated] = useState(age);
+  const [breedUpdated, setBreedUpdated] = useState(breed);
+  const [imageUrlUpdated, setImageUrlUpdated] = useState<string[]>(imageUrl || []);
+  const [filesUpdated, setFilesUpdated] = useState<File[]>([]);
+  const [carouselImages, setCarouselImages] = useState<string[]>([]);
+  const [isAdoptedUpdated, setIsAdoptedUpdated] = useState(isAdopted);
+
+  const resetForm = () => {
+    setNameUpdated(name);
+    setFilesUpdated([]);
+  };
+
+  const uploadImages = async (files: File[]): Promise<string[]> => {
+    const urls: string[] = [];
+    
+    if(files.length === 0) {
+      return urls;
+    }
+
+    try {
+      for (const file of files) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${Date.now()}_${fileName}`;
+        console.log('Uploading file:', filePath);
+        const { data, error } = await supabase.storage
+          .from('animals-images')
+          .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+        if (error) throw error;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('animals-images')
+          .getPublicUrl(filePath);
+
+        urls.push(publicUrl);
+      }
+      
+      return urls;
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      throw error;
+    }
+  };
+
+  const handleUpdateAnimal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!nameUpdated || !typeUpdated || !genderUpdated || !sizeUpdated || !descriptionUpdated) {
+        toast({
+          variant: "destructive",
+          title: "Erro no formulário",
+          description: "Por favor, preencha todos os campos obrigatórios.",
+        });
+        return;
+      }
+      const imageUrls = await uploadImages(filesUpdated);
+      console.log('Uploaded image URLs:', imageUrls);
+
+      if (imageUrls.length > 0) {
+        setImageUrlUpdated((prev) => [...prev, ...imageUrls]);
+      }
+
+      const animal = {
+        name: nameUpdated,
+        type: typeUpdated,
+        breed: breedUpdated,
+        age: ageUpdated,
+        gender: genderUpdated,
+        isAdopted: isAdoptedUpdated,
+        description: descriptionUpdated,
+        size: sizeUpdated,
+        imageUrl: imageUrls,
+      }
+
+      const { error } = await supabase
+        .from('animals')
+        .update(animal)
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Status atualizado",
+        description: `Animal autalizado com sucesso.`,
+      });
+    } catch (error) {
+      console.error('Error updating animal status:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao atualizar status",
+        description: "Não foi possível atualizar o animal. Tente novamente.",
+      });
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  useEffect(() => {
+    if (imageUrl && Array.isArray(imageUrl)) {
+      setCarouselImages(imageUrl);
+    }
+  },[imageUrl]);
 
   return (
     <>
       <div className="card-animal group">
         <div className="relative overflow-hidden">
-          {/* Imagem do animal */}
+          { imageUrl && imageUrl.length > 0 && (
           <img 
-            src={imageUrl} 
-            alt={`${name} - ${type}`} 
+            src={ imageUrl[0] } 
+            alt={`${nameUpdated} - ${typeUpdated}`} 
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
           />
+          )}
           
-          {/* Badge para mostrar se está adotado */}
           {isAdopted && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <Badge className="bg-ong-orange text-white text-lg font-semibold px-4 py-1.5">
@@ -73,7 +179,6 @@ const AnimalCard: React.FC<AnimalProps> = ({
             </div>
           )}
           
-          {/* Botão de favorito */}
           <button className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-colors">
             <Heart size={18} className="text-gray-500 hover:text-red-500 transition-colors" />
           </button>
@@ -82,28 +187,26 @@ const AnimalCard: React.FC<AnimalProps> = ({
         {/* Informações do animal */}
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-heading font-semibold text-lg">{name}</h3>
+            <h3 className="font-heading font-semibold text-lg">{nameUpdated}</h3>
             <Badge 
               className={
-                type === 'cat' ? 'bg-indigo-100 text-indigo-700' :
-                type === 'dog' ? 'bg-amber-100 text-amber-700' :
-                type === 'bird' ? 'bg-teal-100 text-teal-700' :
+                typeUpdated === 'cat' ? 'bg-indigo-100 text-indigo-700' :
+                typeUpdated === 'dog' ? 'bg-amber-100 text-amber-700' :
                 'bg-gray-100 text-gray-700'
               }
             >
-              {type === 'cat' ? 'Gato' : 
-               type === 'dog' ? 'Cachorro' : 
-               type === 'bird' ? 'Ave' : 'Outro'}
+              {typeUpdated === 'cat' ? 'Gato' : 
+               typeUpdated === 'dog' ? 'Cachorro' : 'Outro'}
             </Badge>
           </div>
           
           <div className="text-gray-500 text-sm space-y-1 mb-4">
-            <p>{breed || 'SRD'}</p>
-            <p>{age} • {gender === 'male' ? 'Macho' : 'Fêmea'}</p>
+            <p>{breedUpdated || 'SRD'}</p>
+            <p>{ageUpdated} • {genderUpdated === 'male' ? 'Macho' : 'Fêmea'}</p>
             <p>
               Porte: {
-                size === 'small' ? 'Pequeno' :
-                size === 'medium' ? 'Médio' :
+                sizeUpdated === 'small' ? 'Pequeno' :
+                sizeUpdated === 'medium' ? 'Médio' :
                 'Grande'
               }
             </p>
@@ -112,16 +215,152 @@ const AnimalCard: React.FC<AnimalProps> = ({
           <Button 
             variant="outline" 
             className="w-full border-ong-teal text-ong-teal hover:bg-ong-teal hover:text-white transition-colors flex items-center justify-center gap-1"
-            disabled={isAdopted}
-            onClick={() => setShowDetails(true)}
+            onClick={() => isAuthenticated ? setIsEditAnimalOpen(true) : setShowDetails(true)}
           >
             <Info size={16} />
-            {isAdopted ? 'Ver detalhes' : 'Quero adotar'}
+            {isAuthenticated ? 'Editar' : 'Quero adotar'}
           </Button>
         </div>
       </div>
+      
+      <Dialog open={isEditAnimalOpen} onOpenChange={setIsEditAnimalOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="font-heading text-2xl flex items-center justify-between">
+              {'Editar'}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleUpdateAnimal}>
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-medium mb-4">Informações Básicas</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Nome</label>
+                    <input 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      placeholder="Nome do animal"
+                      value={nameUpdated}
+                      onChange={(e) => setNameUpdated(e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Tipo</label>
+                    <select 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      value={typeUpdated}
+                      onChange={(e) => setTypeUpdated(e.target.value as "dog" | "cat" | "other")}
+                      required
+                    >
+                      <option value="dog">Cachorro</option>
+                      <option value="cat">Gato</option>
+                      <option value="other">Outro</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Idade</label>
+                    <input 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      placeholder="Ex: 2 anos"
+                      value={ageUpdated}
+                      onChange={(e) => setAgeUpdated(e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Sexo</label>
+                    <select 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      value={genderUpdated}
+                      onChange={(e) => setGenderUpdated(e.target.value as "male" || "female")}
+                      required
+                    >
+                      <option value="male">Macho</option>
+                      <option value="female">Fêmea</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Raça (opcional)</label>
+                    <input 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      placeholder="SRD se não souber"
+                      value={breedUpdated}
+                      onChange={(e) => setBreedUpdated(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Porte</label>
+                    <select 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      value={sizeUpdated}
+                      onChange={(e) => setSizeUpdated(e.target.value as "small" | "medium" | "large")}
+                      required
+                    >
+                      <option value="small">Pequeno</option>
+                      <option value="medium">Médio</option>
+                      <option value="large">Grande</option>
+                    </select>
+                  </div>
 
-      {/* Modal de detalhes */}
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Status</label>
+                    <select 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      value={isAdoptedUpdated ? 'adopted' : 'available'}
+                      onChange={(e) => setIsAdoptedUpdated(e.target.value === 'adopted')}
+                      required
+                    >
+                      <option value="available">Disponível para adoção</option>
+                      <option value="adopted">Adotado</option>
+                    </select>
+                  </div>
+
+                  <div>       
+                    <Uploadzone
+                      files={filesUpdated}
+                      setFiles={setFilesUpdated}
+                      uploading={uploading}
+                      uploadProgress={uploadProgress}
+                    />
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium mb-1">Descrição</label>
+                    <textarea 
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 h-24"
+                      placeholder="Descreva o animal, seu temperamento, histórico..." 
+                      value={descriptionUpdated}
+                      onChange={(e) => setDescriptionUpdated(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-3 mt-4">
+              <Button type="button" variant="ghost" onClick={() => {
+                setIsEditAnimalOpen(false);
+                resetForm();
+              }}>
+                Cancelar
+              </Button>
+              <Button type="submit" className="bg-ong-teal hover:bg-teal-600">
+                Atualizar Animal
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+      
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -139,7 +378,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
           <div className="mb-6 relative">
             <Carousel className="w-full">
               <CarouselContent>
-                {carouselImages.map((img, index) => (
+                {carouselImages.length > 0 && carouselImages.map((img, index) => (
                   <CarouselItem key={index}>
                     <div className="relative h-64 w-full">
                       <img 
@@ -161,15 +400,13 @@ const AnimalCard: React.FC<AnimalProps> = ({
             </div>
           </div>
 
-          {/* Informações detalhadas */}
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="bg-gray-50 p-3 rounded">
                 <p className="text-sm text-gray-500">Tipo</p>
                 <p className="font-medium">
                   {type === 'cat' ? 'Gato' : 
-                   type === 'dog' ? 'Cachorro' : 
-                   type === 'bird' ? 'Ave' : 'Outro'}
+                   type === 'dog' ? 'Cachorro' : 'Outro'}
                 </p>
               </div>
               <div className="bg-gray-50 p-3 rounded">
@@ -192,9 +429,12 @@ const AnimalCard: React.FC<AnimalProps> = ({
                 </p>
               </div>
               <div className="bg-gray-50 p-3 rounded">
-                <p className="text-sm text-gray-500">ID</p>
-                <p className="font-medium">#{id}</p>
+                <p className="text-sm text-gray-500">Status</p>
+                <p className="font-medium">
+                  {isAdopted ? 'Adotado' : 'Disponível para adoção'}
+                </p>
               </div>
+             
             </div>
 
             <div>
@@ -215,6 +455,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
           </div>
         </DialogContent>
       </Dialog>
+      
     </>
   );
 };

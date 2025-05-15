@@ -9,6 +9,7 @@ ONG protetora dos animais.
 [![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Radix UI](https://img.shields.io/badge/radix%20ui-161618.svg?style=for-the-badge&logo=radix-ui&logoColor=white)](https://www.radix-ui.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
 Projeto desenvolvido durante a disciplina de Projeto Integrador na UNIVESP.
 
@@ -29,5 +30,5 @@ npm i -y
 # Passo 4: Inicie em modo de desenvolvimento.
 npm run dev
 
-# Acesse localhost:8080
+# Acesse localhost:3000
 ```

@@ -2,7 +2,7 @@
 
 import { createPagesBrowserClient, Session } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SupabaseProvider({
   children,
@@ -12,6 +12,18 @@ export function SupabaseProvider({
   initialSession: Session | null;
 }) {
   const [supabaseClient] = useState(() => createPagesBrowserClient());
+
+  useEffect(() => {
+    const validateSession = async () => {
+      if (initialSession?.user) {
+        const { data: { user }, error } = await supabaseClient.auth.getUser();
+        if (error || !user) {
+          await supabaseClient.auth.signOut();
+        }
+      }
+    };
+    validateSession();
+  }, [supabaseClient, initialSession]);
 
   return (
     <SessionContextProvider

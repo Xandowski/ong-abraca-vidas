@@ -33,11 +33,12 @@ export default function PixSupport() {
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-fadeIn" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6">
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-fadeIn z-40" />
+        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6 z-50">
           <Dialog.Title className="text-xl font-bold mb-2 text-center">Apoie o Projeto</Dialog.Title>
-          <p className="text-sm text-gray-600 text-center mb-4">Use o QR Code para apoiar com R$ {valor}</p>
-
+            <Dialog.Description className="text-sm text-gray-600 text-center mb-4">
+              Use o QR Code para apoiar com R$ {valor}
+            </Dialog.Description>
           <div className="flex justify-center mb-4">
             <QRCodeSVG value={payload} size={180} />
           </div>

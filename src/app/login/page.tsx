@@ -74,6 +74,7 @@ const Login = () => {
       toast({
         title: "Login realizado com sucesso!",
         description: "Redirecionando...",
+        duration: 500,
       });
 
       router.push("/dashboard");
