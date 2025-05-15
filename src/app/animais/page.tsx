@@ -58,7 +58,7 @@ const Animals = () => {
     
     const matchesSize = animalSize === 'all' || animal.size === animalSize;
     
-    const matchesAdoptionStatus = includeAdopted || !animal.is_adopted;
+    const matchesAdoptionStatus = includeAdopted || !animal.isAdopted;
     
     return matchesSearch && matchesType && matchesSize && matchesAdoptionStatus;
   });
