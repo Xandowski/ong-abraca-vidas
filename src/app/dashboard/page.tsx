@@ -28,7 +28,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const OngDashboard = () => {
   const router = useRouter();
@@ -90,13 +90,7 @@ const OngDashboard = () => {
     checkAuth();
   }, [router, supabase]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return;
-    }
-
-
-    const fetchAnimals = async () => {
+  const fetchAnimals = useCallback(async () => {
       try {
         const { data, error } = await supabase
           .from('animals')
@@ -119,10 +113,16 @@ const OngDashboard = () => {
       } finally {
         setIsLoading(false);
       }
-    };
+    }, [supabase, toast]);
+
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
 
     fetchAnimals();
-  }, [isAuthenticated, router, supabase, toast]);
+  }, [isAuthenticated, fetchAnimals]);
 
   const uploadImages = async (files: File[]): Promise<string[]> => {
     const urls: string[] = [];
@@ -395,6 +395,7 @@ const OngDashboard = () => {
                           isAuthenticated={isAuthenticated}
                           setUploadProgress={setUploadProgress}
                           setUploading={setUploading}
+                          onAnimalUpdated={fetchAnimals}
                         />
                         <div className="absolute top-2 right-2">
                           <DropdownMenu>

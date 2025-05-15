@@ -24,6 +24,7 @@ export type AnimalProps = Omit<Animal, 'created_at' | 'image_url' | 'is_adopted'
   uploading?: boolean;
   uploadProgress?: number;
   setUploadProgress?: (progress: number) => void;
+  onAnimalUpdated?: () => void;
 }
 
 const AnimalCard: React.FC<AnimalProps> = ({
@@ -42,6 +43,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
   setUploadProgress,
   uploadProgress,
   uploading,
+  onAnimalUpdated
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditAnimalOpen, setIsEditAnimalOpen] = useState(false);
@@ -140,6 +142,11 @@ const AnimalCard: React.FC<AnimalProps> = ({
         title: "Status atualizado",
         description: `Animal autalizado com sucesso.`,
       });
+
+      setIsEditAnimalOpen(false);
+      if (onAnimalUpdated) {
+        onAnimalUpdated();
+      }
     } catch (error) {
       console.error('Error updating animal status:', error);
       toast({
