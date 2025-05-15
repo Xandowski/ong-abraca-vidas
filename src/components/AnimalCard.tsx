@@ -231,7 +231,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
       </div>
       
       <Dialog open={isEditAnimalOpen} onOpenChange={setIsEditAnimalOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-auto">
           <DialogHeader>
             <DialogTitle className="font-heading text-2xl flex items-center justify-between">
               {'Editar'}
