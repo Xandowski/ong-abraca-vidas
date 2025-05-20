@@ -1,4 +1,4 @@
-# <img src="src/app/icon.ico" width="40"> ONG Abraça Vidas <img src="src/app/icon.ico" width="40">
+# <img src="public/logo.svg" width="40"> ONG Abraça Vidas <img src="public/logo.svg" width="40">
 
 ONG protetora dos animais.
 
