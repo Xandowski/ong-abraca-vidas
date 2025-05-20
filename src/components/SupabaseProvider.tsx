@@ -1,36 +1,27 @@
 "use client";
 
-import { createPagesBrowserClient, Session } from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { useEffect, useState } from "react";
+import { createBrowserClient } from '@supabase/ssr';
+import type { Session } from '@supabase/supabase-js';
+import { createContext, useMemo } from 'react';
 
-export function SupabaseProvider({
-  children,
-  initialSession,
-}: {
+interface SupabaseProviderProps {
   children: React.ReactNode;
   initialSession: Session | null;
-}) {
-  const [supabaseClient] = useState(() => createPagesBrowserClient());
+}
 
-  useEffect(() => {
-    const validateSession = async () => {
-      if (initialSession?.user) {
-        const { data: { user }, error } = await supabaseClient.auth.getUser();
-        if (error || !user) {
-          await supabaseClient.auth.signOut();
-        }
-      }
-    };
-    validateSession();
-  }, [supabaseClient, initialSession]);
+const SupabaseContext = createContext<{ supabase: ReturnType<typeof createBrowserClient>; session: Session | null } | undefined>(undefined);
+
+export function SupabaseProvider({ children, initialSession }: SupabaseProviderProps) {
+  const supabase = useMemo(() => createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={initialSession}
-    >
+    <SupabaseContext.Provider value={{ supabase, session: initialSession }}>
       {children}
-    </SessionContextProvider>
+    </SupabaseContext.Provider>
   );
 }
+
+export { SupabaseContext };

@@ -1,27 +1,22 @@
 import { SupabaseProvider } from '@/components/SupabaseProvider';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import type { Metadata } from 'next';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { ClientProviders } from '../components/ClientProviders';
 import '../global.css';
 
-export const metadata: Metadata = {
-  title: 'Abraca Vidas',
-  description: 'A Progressive Web App built with Next.js',
-  manifest: '/manifest.webmanifest',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-icon.png',
-    shortcut: '/favicon.ico',
-  },
-  applicationName: 'Abraca Vidas'
-}
-
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookiesStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookiesStore });  const { data: { session } } = await supabase.auth.getSession();
-    
+  const cookieStore = await cookies();
+  const getAll = () => {
+    const all = cookieStore.getAll();
+    return all.map(({ name, value }) => ({ name, value }));
+  };
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll } }
+  );
+  const { data: { session } } = await supabase.auth.getSession();
+
   return (
     <html lang="pt-BR">
       <head>
@@ -41,5 +36,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </SupabaseProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -5,9 +5,9 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useSupabase } from '@/components/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Filter, Search, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +20,7 @@ const Animals = () => {
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  const supabase = createClientComponentClient();
+  const { supabase } = useSupabase();
   const { toast } = useToast();
 
   useEffect(() => {

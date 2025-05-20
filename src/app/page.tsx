@@ -5,10 +5,9 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PixSupport from '@/components/PixSupport';
 import { Button } from '@/components/ui/button';
+import { useSupabase } from '@/components/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useSession } from '@supabase/auth-helpers-react';
 import { Heart, PawPrint, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -19,9 +18,8 @@ interface NavigatorStandalone extends Navigator {
 }
 
 const Index = () => {
-  const session = useSession();
+  const { supabase, session } = useSupabase();
   const router = useRouter();
-  const supabase = createClientComponentClient();
   const { toast } = useToast();
   const [checking, setChecking] = useState(true);
   const [featuredAnimals, setFeaturedAnimals] = useState<Animal[]>([]);
@@ -44,7 +42,7 @@ const Index = () => {
     };
 
     checkStandalone();
-  }, [router, supabase.auth]);
+  }, [router, supabase]);
 
   useEffect(() => {
     const fetchFeaturedAnimals = async () => {
@@ -92,7 +90,9 @@ const Index = () => {
             </h1>
             
             <p className="text-lg md:text-xl mb-8">
-              Adote, não compre!
+              Conectamos animais que precisam de um lar com pessoas que têm amor para dar.
+              <br />
+              Adote, não compre.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -195,6 +195,67 @@ const Index = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-ong-light">
+          <div className="container mx-auto flex flex-col items-center">
+            <h2 id="about" className="text-2xl md:text-3xl font-bold text-center mb-12 text-ong-dark">
+              Sobre a ONG
+            </h2>
+            <p className="px-80 text-gray-600 text-lg">
+              A Abraça Vidas tem como objetivo a realização de projetos de assistência social, proteção e defesa dos animais, comunicação e conscientização
+               social e apoio a entidades do 3º setor com consultoria de marketing.
+            </p>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 flex flex-col items-center">
+            <h2 id="contact" className="text-2xl md:text-3xl font-bold text-center mb-12 text-ong-dark">
+              Entre em contato
+            </h2>
+            <form className="w-full max-w-lg">
+              <div className="mb-4">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                  Assunto
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ong-teal focus:ring-ong-teal"
+                  placeholder="Digite o assunto"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ong-teal focus:ring-ong-teal"
+                  placeholder="Digite seu email"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                  Mensagem
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={4}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-ong-teal focus:ring-ong-teal"
+                  placeholder="Digite sua mensagem"
+                ></textarea>
+              </div>
+              <Button type="submit" className="bg-ong-teal text-white hover:bg-teal-600">
+                Enviar
+              </Button>
+            </form>
           </div>
         </section>
       </main>

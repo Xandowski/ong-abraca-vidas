@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <h3 className="font-heading text-xl mb-4">Abraça Vidas</h3>
             <p className="text-gray-300 mb-4">
-              Conectamos animais que precisam de um lar com pessoas que têm amor para dar.
+              Venha conosco ser a mudança!
             </p>
             <div className="flex space-x-4">
               <a href="https://www.instagram.com/ongabracavidas/" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">

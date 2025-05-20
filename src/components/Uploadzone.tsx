@@ -13,7 +13,7 @@ const Uploadzone = ({
 }) => {
     return (
         <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">Imagens</label>
+            <label className="block text-sm font-medium mb-1">Carregar imagens</label>
             <div 
                 className={`
                 border-2 border-dashed rounded-lg p-6

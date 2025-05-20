@@ -5,9 +5,9 @@ import Navbar from '@/components/Navbar';
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSupabase } from '@/components/useSupabase';
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AtSign, Key } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,7 +22,7 @@ const formSchema = z.object({
 });
 
 const Login = () => {
-  const supabase = createClientComponentClient(); 
+  const { supabase } = useSupabase();
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -78,6 +78,7 @@ const Login = () => {
       });
 
       router.push("/dashboard");
+      router.refresh();
     } catch (error) {
       toast({
         variant: "destructive",

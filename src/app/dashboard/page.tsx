@@ -7,32 +7,32 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Uploadzone from '@/components/Uploadzone';
+import { useSupabase } from '@/components/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import {
-  Check,
-  LayoutGrid,
-  List,
-  MoreVertical,
-  PawPrint,
-  Pencil,
-  PlusCircle,
-  Search,
-  Trash2
+    Check,
+    LayoutGrid,
+    List,
+    MoreVertical,
+    PawPrint,
+    Pencil,
+    PlusCircle,
+    Search,
+    Trash2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 const OngDashboard = () => {
+  const { supabase } = useSupabase();
   const router = useRouter();
-  const supabase = createClientComponentClient();
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   

@@ -10,9 +10,9 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useSupabase } from '@/components/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Heart, Images, Info } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import Uploadzone from './Uploadzone';
@@ -47,7 +47,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditAnimalOpen, setIsEditAnimalOpen] = useState(false);
-  const supabase = createClientComponentClient();
+  const { supabase } = useSupabase();
   const { toast } = useToast();
   const [nameUpdated, setNameUpdated] = useState(name);
   const [typeUpdated, setTypeUpdated] = useState(type);
@@ -99,11 +99,14 @@ const AnimalCard: React.FC<AnimalProps> = ({
     }
   };
 
+  const handleDeleteImage = (index: number) => {
+    setImageUrlUpdated((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const { data: { user } } = await supabase.auth.getUser();
-
       if (!nameUpdated || !typeUpdated || !genderUpdated || !sizeUpdated || !descriptionUpdated) {
         toast({
           variant: "destructive",
@@ -113,12 +116,9 @@ const AnimalCard: React.FC<AnimalProps> = ({
         return;
       }
       const imageUrls = await uploadImages(filesUpdated);
-      console.log('Uploaded image URLs:', imageUrls);
-
-      if (imageUrls.length > 0) {
-        setImageUrlUpdated((prev) => [...prev, ...imageUrls]);
-      }
-
+      // Adiciona as novas imagens às já existentes
+      const allImages = [...imageUrlUpdated, ...imageUrls];
+      setImageUrlUpdated(allImages);
       const animal = {
         name: nameUpdated,
         type: typeUpdated,
@@ -128,21 +128,17 @@ const AnimalCard: React.FC<AnimalProps> = ({
         isAdopted: isAdoptedUpdated,
         description: descriptionUpdated,
         size: sizeUpdated,
-        imageUrl: imageUrls,
-      }
-
+        imageUrl: allImages,
+      };
       const { error } = await supabase
         .from('animals')
         .update(animal)
         .eq('id', id);
-
       if (error) throw error;
-
       toast({
         title: "Status atualizado",
         description: `Animal autalizado com sucesso.`,
       });
-
       setIsEditAnimalOpen(false);
       if (onAnimalUpdated) {
         onAnimalUpdated();
@@ -237,7 +233,6 @@ const AnimalCard: React.FC<AnimalProps> = ({
               {'Editar'}
             </DialogTitle>
           </DialogHeader>
-          
           <form onSubmit={handleUpdateAnimal}>
             <div className="space-y-6">
               <div>
@@ -317,6 +312,36 @@ const AnimalCard: React.FC<AnimalProps> = ({
                     </select>
                   </div>
 
+                  <div>       
+                    <Uploadzone
+                      files={filesUpdated}
+                      setFiles={setFilesUpdated}
+                      uploading={uploading}
+                      uploadProgress={uploadProgress}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Imagens</label>
+                    {imageUrlUpdated.length > 0 && (
+                      <div className="flex flex-wrap gap-3 mb-4">
+                        {imageUrlUpdated.map((img, idx) => (
+                          <section key={idx} className="relative group">
+                            <img src={img} alt={`Imagem ${idx + 1}`} className="w-24 h-24 object-cover rounded" />
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteImage(idx)}
+                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-80 hover:opacity-100"
+                              aria-label="Remover imagem"
+                            >
+                              <span aria-hidden>×</span>
+                            </button>
+                          </section>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium mb-1">Status</label>
                     <select 
@@ -328,15 +353,6 @@ const AnimalCard: React.FC<AnimalProps> = ({
                       <option value="available">Disponível para adoção</option>
                       <option value="adopted">Adotado</option>
                     </select>
-                  </div>
-
-                  <div>       
-                    <Uploadzone
-                      files={filesUpdated}
-                      setFiles={setFilesUpdated}
-                      uploading={uploading}
-                      uploadProgress={uploadProgress}
-                    />
                   </div>
                   
                   <div className="md:col-span-2">
