@@ -7,25 +7,25 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Uploadzone from '@/components/Uploadzone';
 import { useSupabase } from '@/components/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
 import {
-    Check,
-    LayoutGrid,
-    List,
-    MoreVertical,
-    PawPrint,
-    Pencil,
-    PlusCircle,
-    Search,
-    Trash2
+  Check,
+  LayoutGrid,
+  List,
+  MoreVertical,
+  PawPrint,
+  Pencil,
+  PlusCircle,
+  Search,
+  Trash2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -592,7 +592,7 @@ const OngDashboard = () => {
                     <label className="block text-sm font-medium mb-1">Idade</label>
                     <input 
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Ex: 2 anos"
+                      placeholder="Ex: 2"
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
                       required

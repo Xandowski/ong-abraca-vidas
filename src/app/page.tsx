@@ -203,7 +203,7 @@ const Index = () => {
             <h2 id="about" className="text-2xl md:text-3xl font-bold text-center mb-12 text-ong-dark">
               Sobre a ONG
             </h2>
-            <p className="px-80 text-gray-600 text-lg">
+            <p className="lg:px-80 text-gray-600 text-lg">
               A Abraça Vidas tem como objetivo a realização de projetos de assistência social, proteção e defesa dos animais, comunicação e conscientização
                social e apoio a entidades do 3º setor com consultoria de marketing.
             </p>
