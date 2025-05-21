@@ -550,7 +550,7 @@ const OngDashboard = () => {
       </main>
 
       <Dialog open={isAddAnimalOpen} onOpenChange={setIsAddAnimalOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px]  max-h-[90vh] overflow-auto">
           <DialogHeader>
             <DialogTitle className="font-heading text-2xl flex items-center justify-between">
               {'Cadastrar Novo Animal'}
