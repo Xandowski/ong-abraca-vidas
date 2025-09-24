@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+  #     - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+  #     - DATABASE_URL=postgresql://postgres:postgres@db:5432/abraca_vidas
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - abraca_vidas_network
+
+  db:
+    image: supabase/postgres:15.1.0.117
+    ports:
+      - "5432:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        docker-entrypoint.sh postgres -c config_file=/etc/postgresql/postgresql.conf &
+        until pg_isready -U postgres; do sleep 2; done
+        psql -U postgres -d abraca_vidas -f /docker-entrypoint-initdb.d/init.sql
+        wait
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: abraca_vidas
+      SUPABASE_ADMIN_PASSWORD: admin123 # senha para o usuário supabase_admin
+      # Configurações específicas do Supabase
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=en-US"
+      AUTH_SALT: "super-secret-salt-value"
+      AUTH_JIT_ROLES_ENABLED: "true"
+      SERVICE_ROLE_PASSWORD: "service_role_password"
+      DASHBOARD_USERNAME: "supabase"
+      DASHBOARD_PASSWORD: "this_password_is_insecure_and_should_be_updated"
+      JWT_SECRET: "your-super-secret-jwt-token-with-at-least-32-characters-long"
+      ENABLE_SIGNUP: "true"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - abraca_vidas_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@abracavidas.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - abraca_vidas_network
+
+volumes:
+  pgdata:
+
+networks:
+  abraca_vidas_network:
+    driver: bridge
