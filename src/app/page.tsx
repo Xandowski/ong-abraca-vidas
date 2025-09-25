@@ -12,6 +12,8 @@ import { Heart, PawPrint, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { fetchCatImage } from '@/services/api/cat';
+import { CatImage } from '@/types/cat';
 
 interface NavigatorStandalone extends Navigator {
   standalone?: boolean;
@@ -24,6 +26,18 @@ const Index = () => {
   const [checking, setChecking] = useState(true);
   const [featuredAnimals, setFeaturedAnimals] = useState<Animal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [cat, setCat] = useState<CatImage | null>(null);
+
+  useEffect(() => {
+    fetchCatImage()
+        .then((cats) => {
+          if (cats.length > 0) {
+            setCat(cats[0]);
+            console.log("Cat URL:", cats[0].url);
+          }
+        })
+        .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const checkStandalone = async () => {
@@ -83,17 +97,18 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-grow">
-        <section className="relative min-h-[600px] flex items-center bg-gradient-to-br from-orange-400 to-orange-600">
-          <div className="container mx-auto px-4 py-16 text-center text-white relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        <section className="relative min-h-[600px] flex items-center justify-center bg-gradient-to-br "
+        style={{ backgroundImage: cat ? `url(${cat.url})` : "none", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="flex flex-col items-center px-4 py-16 text-white relative z-10 ">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 w-fit ">
               Encontre seu novo melhor amigo
             </h1>
-            
-            <p className="text-lg md:text-xl mb-8">
-              Conectamos animais que precisam de um lar com pessoas que têm amor para dar.
-              <br />
-              Adote, não compre.
-            </p>
+          
+              <p className="text-lg md:text-xl w-fit ">
+                Conectamos animais que precisam de um lar com pessoas que têm amor para dar.        
+              </p>
+              <p className="text-lg md:text-xl mb-8 w-fit">Adote, não compre.</p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/animais">

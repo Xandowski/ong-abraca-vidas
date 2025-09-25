@@ -5,33 +5,9 @@ import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { ClientProviders } from '../components/ClientProviders';
 import '../global.css';
+import { metadata as siteMetadata } from "./metadata"; 
 
-export const metadata: Metadata = {
-  title: 'Abraça Vidas - ONG de Proteção Animal',
-  description: 'Conectamos animais que precisam de um lar com pessoas que têm amor para dar. Adote, não compre.',
-  applicationName: 'Abraça Vidas',
-  authors: [{ name: 'Abraça Vidas' }],
-  keywords: ['adoção', 'animais', 'pets', 'ong', 'proteção animal', 'gatos', 'cachorros'],
-  creator: 'Abraça Vidas',
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    title: 'Abraça Vidas - ONG de Proteção Animal',
-    description: 'Conectamos animais que precisam de um lar com pessoas que têm amor para dar. Adote, não compre.',
-    siteName: 'Abraça Vidas',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Abraça Vidas - ONG de Proteção Animal',
-    description: 'Conectamos animais que precisam de um lar com pessoas que têm amor para dar. Adote, não compre.',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    viewportFit: 'cover',
-  },
-  themeColor: '#f97316',
-};
+export const metadata: Metadata = siteMetadata;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
