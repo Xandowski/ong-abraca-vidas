@@ -181,9 +181,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
             </div>
           )}
           
-          <button className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-colors">
-            <Heart size={18} className="text-gray-500 hover:text-red-500 transition-colors" />
-          </button>
+          
         </div>
         
         {/* Informações do animal */}
@@ -220,7 +218,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
             onClick={() => isAuthenticated ? setIsEditAnimalOpen(true) : setShowDetails(true)}
           >
             <Info size={16} />
-            {isAuthenticated ? 'Editar' : 'Quero adotar'}
+            {isAuthenticated ? 'Editar' : 'Mais Informações'}
           </Button>
         </div>
       </div>
@@ -466,11 +464,18 @@ const AnimalCard: React.FC<AnimalProps> = ({
 
             {!isAdopted && (
               <div className="pt-4 border-t">
-                <Button className="w-full bg-ong-teal hover:bg-teal-600">
-                  Iniciar processo de adoção
+                <Button 
+                  className="w-full bg-ong-teal hover:bg-teal-600"
+                  onClick={() => {
+                    const message = `Olá! Estou interessado(a) em adotar ${nameUpdated}.`;
+                    const whatsappUrl = `https://chat.whatsapp.com/EBqcPrjw7Y7Fo2rBeoUVmd?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                  }}
+                >
+                  Quero Adotar
                 </Button>
                 <p className="text-xs text-center mt-2 text-gray-500">
-                  Ao clicar, você será redirecionado para o formulário de interesse
+                  Ao clicar, você será redirecionado para o WhatsApp
                 </p>
               </div>
             )}
