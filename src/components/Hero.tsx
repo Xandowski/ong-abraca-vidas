@@ -7,7 +7,6 @@ import { fetchCatImage } from '@/services/api/cat';
 export default async function Hero() {
     let catUrl;
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
       const cats = await fetchCatImage();
       catUrl = cats?.[0]?.url;
     } catch (error) {
