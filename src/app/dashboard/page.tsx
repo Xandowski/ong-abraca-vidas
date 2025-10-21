@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Uploadzone from '@/components/Uploadzone';
-import { useSupabase } from '@/components/useSupabase';
+import { useSupabase } from '@/hooks/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
 import {

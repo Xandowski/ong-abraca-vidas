@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useSupabase } from '@/components/useSupabase';
+import { useSupabase } from '@/hooks/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
 import { Filter, Search, X } from 'lucide-react';

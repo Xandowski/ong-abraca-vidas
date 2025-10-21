@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SupabaseContext } from './SupabaseProvider';
+import { SupabaseContext } from '@/components/SupabaseProvider';
 
 export function useSupabase() {
   const context = useContext(SupabaseContext);

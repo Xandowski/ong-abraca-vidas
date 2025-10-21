@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSupabase } from '@/components/useSupabase';
+import { useSupabase } from '@/hooks/useSupabase';
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, Key } from 'lucide-react';

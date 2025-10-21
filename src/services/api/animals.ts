@@ -1,64 +1,27 @@
-import { useSupabase } from '@/components/useSupabase';
 import { Animal } from '@/types/database';
 
-export const useAnimalService = () => {
-  const { supabase } = useSupabase();
+export async function fetchAnimals(params?: { limit?: number, type?: string }) {
+  const queryParams = new URLSearchParams();
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+  if (params?.limit) {
+    queryParams.append('limit', params.limit.toString());
+  }
+  
+  if (params?.type) {
+    queryParams.append('type', params.type);
+  }
 
-  return {
-    getFeatured: async (): Promise<Animal[]> => {
-        const { data, error } = await supabase
-        .from('animals')
-        .select('*')
-        .eq('isAdopted', false)
-        .order('created_at', { ascending: false })
-        .limit(4);
-
-        if (error) throw error;
-        return data || [];
-    },
-
-    getAll: async (): Promise<Animal[]> => {
-        const { data, error } = await supabase
-        .from('animals')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        return data || [];
-    },
-
-    getById: async (id: string): Promise<Animal | null> => {
-        const { data, error } = await supabase
-        .from('animals')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-        if (error) throw error;
-        return data;
-    },
-
-    create: async (animal: Omit<Animal, 'id' | 'created_at'>): Promise<Animal> => {
-        const { data, error } = await supabase
-        .from('animals')
-        .insert(animal)
-        .select()
-        .single();
-
-        if (error) throw error;
-        return data;
-    },
-
-    update: async (id: string, animal: Partial<Animal>): Promise<Animal> => {
-        const { data, error } = await supabase
-        .from('animals')
-        .update(animal)
-        .eq('id', id)
-        .select()
-        .single();
-
-        if (error) throw error;
-        return data;
+  const path = `/api/animals${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+  
+  try {
+    const response = await fetch(`${baseUrl}${path}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch animals');
     }
+    const data = await response.json();
+    return data as Animal[];
+  } catch (error) {
+    console.error('Error fetching animals:', error);
+    throw error;
   }
 }

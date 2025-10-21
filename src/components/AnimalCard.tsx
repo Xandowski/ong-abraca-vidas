@@ -10,7 +10,7 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useSupabase } from '@/components/useSupabase';
+import { useSupabase } from '@/hooks/useSupabase';
 import { useToast } from '@/hooks/use-toast';
 import { Animal } from '@/types/database';
 import { Heart, Images, Info } from 'lucide-react';
@@ -116,7 +116,6 @@ const AnimalCard: React.FC<AnimalProps> = ({
         return;
       }
       const imageUrls = await uploadImages(filesUpdated);
-      // Adiciona as novas imagens às já existentes
       const allImages = [...imageUrlUpdated, ...imageUrls];
       setImageUrlUpdated(allImages);
       const animal = {
