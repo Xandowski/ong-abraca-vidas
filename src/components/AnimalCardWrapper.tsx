@@ -4,23 +4,7 @@ import { fetchAnimals } from "@/services/api/animals";
 import { CardSkeleton } from "./ui/skeleton";
 
 export default async function AnimalCardWrapper({ limit }: { limit?: number }) {
-    let animals: Animal[] = [];
-    let error = null;
-
-    try {
-        animals = await fetchAnimals({ limit });
-    } catch (err) {
-        error = err;
-        console.error('Error fetching animals:', err);
-    }
-
-    if (error) {
-        return (
-            <div className="text-center py-8">
-                <p className="text-red-500">Erro ao carregar os animais. Por favor, tente novamente mais tarde.</p>
-            </div>
-        );
-    }
+    const animals = await fetchAnimals({ limit });
 
     if (!animals || animals.length === 0) {
         return (

@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Heart, PawPrint, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { HeroSkeleton } from '@/components/ui/skeleton';
+import { HeroSkeleton, CardSkeleton } from '@/components/ui/skeleton';
 import Hero from '@/components/Hero';
 import { ContactForm } from '@/components/ContactForm';
 import AnimalCardWrapper from '@/components/AnimalCardWrapper';
+
+export const dynamic = 'force-dynamic';
 
 const Index = () => {
   return (
