@@ -17,42 +17,64 @@ export function NavbarMobile() {
       <button 
         onClick={() => setIsMenuOpen(!isMenuOpen)} 
         className="md:hidden text-gray-700"
+        aria-expanded={isMenuOpen}
+        aria-controls="mobile-menu"
+        aria-label="Menu de navegação"
       >
-        {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        <span className="sr-only">
+          {isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+        </span>
+        {isMenuOpen ? (
+          <X className="h-6 w-6" aria-hidden="true" />
+        ) : (
+          <Menu className="h-6 w-6" aria-hidden="true" />
+        )}
       </button>
       
       {isMenuOpen && (
-        <div className="md:hidden bg-white px-4 py-2 border-t animate-fade-in">
-          <div className="flex flex-col gap-3 pb-3">
-            <Link 
-              href="/animais" 
-              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Adotar
-            </Link>
-            <a 
-              href="/#about" 
-              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Sobre
-            </a>
-            <a 
-              href="/#contact" 
-              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contato
-            </a>
-            <NavbarAuth />
-            <div className="flex flex-col gap-2 pt-2">
-              {!isHomePage && (
+        <nav 
+          id="mobile-menu"
+          className="md:hidden bg-white px-4 py-2 border-t animate-fade-in"
+          aria-label="Navegação principal mobile"
+        >
+          <ul className="flex flex-col gap-3 pb-3 list-none">
+            <li>
+              <Link 
+                href="/animais" 
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Adotar
+              </Link>
+            </li>
+            <li>
+              <a 
+                href="/#about" 
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Sobre
+              </a>
+            </li>
+            <li>
+              <a 
+                href="/#contact" 
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contato
+              </a>
+            </li>
+            <li>
+              <NavbarAuth />
+            </li>
+            {!isHomePage && (
+              <li className="pt-2">
                 <PixSupport />
-              )}
-            </div>
-          </div>
-        </div>
+              </li>
+            )}
+          </ul>
+        </nav>
       )}
     </>
   );
