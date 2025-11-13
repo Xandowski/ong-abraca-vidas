@@ -1,40 +1,30 @@
 import { NextResponse } from "next/server";
 import { CatImage } from "@/types/cat";
-import { unstable_cache } from 'next/cache';
 
+// Busca diretamente da Cat API sem cache no servidor
+// O cache será gerenciado client-side (localStorage) por dispositivo
 async function fetchCatFromAPI(): Promise<CatImage[]> {
   console.log("📡 Buscando nova imagem do TheCatAPI...");
-  const response = await fetch("https://api.thecatapi.com/v1/images/search");
+  const response = await fetch("https://api.thecatapi.com/v1/images/search", {
+    cache: 'no-store' // Garante que não haverá cache do Next.js
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch from TheCatAPI");
   }
   return response.json();
 }
 
-// Função que será cacheada
-const getCachedCatImage = unstable_cache(
-  async () => {
-    try {
-      return await fetchCatFromAPI();
-    } catch (error) {
-      console.error("Erro ao buscar gatos:", error);
-      throw error;
-    }
-  },
-  ["cat-image"], // cache key
-  {
-    revalidate: 86400, // 24 horas em segundos
-    tags: ["cat-image"],
-  }
-);
-
 export async function GET() {
   try {
-    const data = await getCachedCatImage();
+    const data = await fetchCatFromAPI();
     
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "public, max-age=86400", // 24h em segundos
+        // Sem cache no servidor - cada requisição busca nova imagem
+        // O cliente (navegador) é quem decide cachear ou não via localStorage
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
       },
     });
   } catch (error) {
