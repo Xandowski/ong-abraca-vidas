@@ -246,6 +246,34 @@ const OngDashboard = () => {
     }
   };
 
+  const handleUpdateAnimalStatus = async (id: number, isAdopted: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('animals')
+        .update({ isAdopted })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Atualiza o estado local
+      setAnimals(animals.map(animal => 
+        animal.id === id ? { ...animal, isAdopted } : animal
+      ));
+
+      toast({
+        title: "Status atualizado",
+        description: `Animal marcado como ${isAdopted ? 'adotado' : 'disponível'}.`,
+      });
+    } catch (error) {
+      console.error('Error updating animal status:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao atualizar status",
+        description: "Não foi possível atualizar o status. Tente novamente.",
+      });
+    }
+  };
+
   const filteredAnimals = animals.filter((animal) => {
     const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                        (animal.breed && animal.breed.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -415,7 +443,7 @@ const OngDashboard = () => {
                               >
                                 <Trash2 size={14} /> Excluir
                               </DropdownMenuItem>
-                              {/* {!animal.isAdopted && (
+                              {!animal.isAdopted && (
                                 <DropdownMenuItem 
                                   className="flex items-center gap-2 text-green-600"
                                   onClick={() => handleUpdateAnimalStatus(animal.id, true)}
@@ -430,7 +458,7 @@ const OngDashboard = () => {
                                 >
                                   <PawPrint size={14} /> Marcar como disponível
                                 </DropdownMenuItem>
-                              )} */}
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -505,7 +533,7 @@ const OngDashboard = () => {
                                 >
                                   <Trash2 size={14} />
                                 </Button>
-                                {/* {!animal.isAdopted ? (
+                                {!animal.isAdopted ? (
                                   <Button 
                                     variant="ghost" 
                                     size="sm" 
@@ -523,7 +551,7 @@ const OngDashboard = () => {
                                   >
                                     <PawPrint size={14} />
                                   </Button>
-                                )} */}
+                                )}
                               </div>
                             </td>
                           </tr>
