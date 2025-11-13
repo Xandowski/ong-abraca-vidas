@@ -604,14 +604,18 @@ const OngDashboard = () => {
           </DialogHeader>
           
           <form onSubmit={handleCreateAnimal}>
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-medium mb-4">Informações Básicas</h3>
+            <fieldset className="space-y-6">
+              <legend className="font-medium mb-4 text-base">Informações Básicas</legend>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Nome</label>
+                    <label htmlFor="animal-name" className="block text-sm font-medium mb-1">
+                      Nome
+                    </label>
                     <input 
+                      id="animal-name"
+                      name="name"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="Nome do animal"
                       value={name}
@@ -621,8 +625,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Tipo</label>
+                    <label htmlFor="animal-type" className="block text-sm font-medium mb-1">
+                      Tipo
+                    </label>
                     <select 
+                      id="animal-type"
+                      name="type"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={type}
                       onChange={(e) => setType(e.target.value)}
@@ -635,8 +643,13 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Idade</label>
+                    <label htmlFor="animal-age" className="block text-sm font-medium mb-1">
+                      Idade
+                    </label>
                     <input 
+                      id="animal-age"
+                      name="age"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="Ex: 2"
                       value={age}
@@ -646,8 +659,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Sexo</label>
+                    <label htmlFor="animal-gender" className="block text-sm font-medium mb-1">
+                      Sexo
+                    </label>
                     <select 
+                      id="animal-gender"
+                      name="gender"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
@@ -659,8 +676,13 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Raça (opcional)</label>
+                    <label htmlFor="animal-breed" className="block text-sm font-medium mb-1">
+                      Raça (opcional)
+                    </label>
                     <input 
+                      id="animal-breed"
+                      name="breed"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="SRD se não souber"
                       value={breed}
@@ -669,8 +691,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Porte</label>
+                    <label htmlFor="animal-size" className="block text-sm font-medium mb-1">
+                      Porte
+                    </label>
                     <select 
+                      id="animal-size"
+                      name="size"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={size}
                       onChange={(e) => setSize(e.target.value)}
@@ -683,7 +709,9 @@ const OngDashboard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">URL da Imagem</label>
+                    <label className="block text-sm font-medium mb-1">
+                      Carregar imagens
+                    </label>
                     <Uploadzone
                       files={files}
                       setFiles={setFiles}
@@ -693,8 +721,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Descrição</label>
+                    <label htmlFor="animal-description" className="block text-sm font-medium mb-1">
+                      Descrição
+                    </label>
                     <textarea 
+                      id="animal-description"
+                      name="description"
                       className="w-full border border-gray-300 rounded-md px-3 py-2 h-24"
                       placeholder="Descreva o animal, seu temperamento, histórico..." 
                       value={description}
@@ -703,8 +735,7 @@ const OngDashboard = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
+            </fieldset>
             
             <div className="flex justify-end gap-3 mt-4">
               <Button type="button" variant="ghost" onClick={() => {
