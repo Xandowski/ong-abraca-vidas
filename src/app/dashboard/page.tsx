@@ -291,9 +291,12 @@ const OngDashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Pular para o conteúdo principal
+      </a>
       <Navbar />
       
-      <main className="flex-grow bg-ong-light">
+      <main id="main-content" className="flex-grow bg-ong-light">
         <section className="bg-ong-dark text-white py-6">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">

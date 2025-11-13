@@ -14,9 +14,12 @@ export const dynamic = 'force-dynamic';
 const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Pular para o conteúdo principal
+      </a>
       <Navbar />
       
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         <Suspense fallback={<HeroSkeleton />}>
           <Hero />
         </Suspense>

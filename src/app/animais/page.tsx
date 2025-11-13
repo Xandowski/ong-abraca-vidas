@@ -72,9 +72,12 @@ const Animals = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Pular para o conteúdo principal
+      </a>
       <Navbar />
       
-      <main className="flex-grow bg-ong-light">
+      <main id="main-content" className="flex-grow bg-ong-light">
         <section className="bg-orange-400 text-white py-10">
           <div className="container mx-auto px-4">
             <h1 className="text-3xl font-bold">Animais para adoção</h1>
