@@ -353,42 +353,60 @@ const OngDashboard = () => {
           <div className="bg-white rounded-lg shadow">
             <div className="p-4 border-b">
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex items-center gap-2 flex-1 bg-gray-100 rounded-md px-3 py-2">
-                  <Search className="h-5 w-5 text-gray-400" />
+                <form role="search" className="flex items-center gap-2 flex-1 bg-gray-100 rounded-md px-3 py-2">
+                  <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <label htmlFor="dashboard-search" className="sr-only">
+                    Buscar animal por nome ou raça
+                  </label>
                   <input
-                    type="text"
+                    id="dashboard-search"
+                    name="search"
+                    type="search"
                     placeholder="Buscar animal..."
                     className="bg-transparent border-none focus:outline-none w-full"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                </div>
+                </form>
                 
                 <div className="flex gap-2">
-                  <select
-                    className="rounded-md border border-gray-300 px-3 py-2"
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value as 'all' | 'available' | 'adopted')}
-                  >
-                    <option value="all">Todos</option>
-                    <option value="available">Para adoção</option>
-                    <option value="adopted">Adotados</option>
-                  </select>
+                  <div>
+                    <label htmlFor="status-filter" className="sr-only">
+                      Filtrar por status de adoção
+                    </label>
+                    <select
+                      id="status-filter"
+                      name="status"
+                      className="rounded-md border border-gray-300 px-3 py-2"
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value as 'all' | 'available' | 'adopted')}
+                    >
+                      <option value="all">Todos</option>
+                      <option value="available">Para adoção</option>
+                      <option value="adopted">Adotados</option>
+                    </select>
+                  </div>
                   
-                  <div className="border rounded-md p-1 flex gap-1">
+                  <div className="border rounded-md p-1 flex gap-1" role="group" aria-label="Modo de visualização">
                     <Button
+                      type="button"
                       variant={viewMode === 'grid' ? 'default' : 'ghost'}
                       size="icon"
                       onClick={() => setViewMode('grid')}
+                      aria-label="Visualização em grade"
+                      aria-pressed={viewMode === 'grid'}
                     >
-                      <LayoutGrid size={16} />
+                      <LayoutGrid size={16} aria-hidden="true" />
                     </Button>
                     <Button
+                      type="button"
                       variant={viewMode === 'list' ? 'default' : 'ghost'}
                       size="icon"
                       onClick={() => setViewMode('list')}
+                      aria-label="Visualização em lista"
+                      aria-pressed={viewMode === 'list'}
                     >
-                      <List size={16} />
+                      <List size={16} aria-hidden="true" />
                     </Button>
                   </div>
                 </div>
