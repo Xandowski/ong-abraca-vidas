@@ -29,8 +29,8 @@ const calcularCRC16 = (payload) => {
 
 // Monta payload SEM o campo 54 (valor) e sem o CRC
 // Campo 54 removido para permitir valor editável pelo usuário
-// Estrutura: 00(versão) 01(tipo) 26(chave) 52(categoria) 53(moeda) 58(país) 59(nome) 60(cidade) 62(txid) 63(CRC placeholder)
-const payloadSemCRC = `00020126360014BR.GOV.BCB.PIX0114${pixKey}520400005303986580205916${nome}6010${cidade}621405107wQwNucsGM6304`;
+// Estrutura: 00(versão) 01(tipo) 26(chave) 52(categoria) 53(moeda) 58(país=BR) 59(nome) 60(cidade) 62(txid) 63(CRC placeholder)
+const payloadSemCRC = `00020126360014BR.GOV.BCB.PIX0114${pixKey}52040000530398658802BR5916${nome}6010${cidade}621405107wQwNucsGM6304`;
 
 // Calcula CRC e monta payload final
 const crcCalculado = calcularCRC16(payloadSemCRC);
