@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { useSupabase } from '@/hooks/useSupabase';
-import { LogOut } from 'lucide-react';
+import { Lock, LogOut } from 'lucide-react';
+import Link from 'next/link';
 
 export function NavbarAuth() {
   const { supabase, session } = useSupabase();
@@ -32,14 +33,30 @@ export function NavbarAuth() {
   if (!session) return null;
 
   return (
-    <Button 
-      variant="ghost" 
-      size="lg" 
-      className="w-14 hover:bg-transparent hover:text-red-500"
-      onClick={handleLogout}
-      aria-label="Sair da conta"
-    >
-      <LogOut className='hover:cursor-pointer' aria-hidden="true" /> Sair
-    </Button>
+    <div className="flex items-center gap-2">
+      {/* Botão Alterar Senha */}
+      <Link href="/dashboard/alterar-senha" aria-label="Alterar senha">
+        <Button 
+          variant="ghost" 
+          size="lg" 
+          className="hover:bg-transparent hover:text-ong-primary"
+        >
+          <Lock className='hover:cursor-pointer h-5 w-5' aria-hidden="true" />
+          <span className="hidden sm:inline ml-1">Senha</span>
+        </Button>
+      </Link>
+
+      {/* Botão Logout */}
+      <Button 
+        variant="ghost" 
+        size="lg" 
+        className="hover:bg-transparent hover:text-red-500"
+        onClick={handleLogout}
+        aria-label="Sair da conta"
+      >
+        <LogOut className='hover:cursor-pointer h-5 w-5' aria-hidden="true" />
+        <span className="hidden sm:inline ml-1">Sair</span>
+      </Button>
+    </div>
   );
 }

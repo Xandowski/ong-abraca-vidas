@@ -2,25 +2,13 @@ import Link from "next/link";
 import PixSupport from '@/components/PixSupport';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import { fetchCatImage } from '@/services/api/cat';
+import { HeroBackground } from '@/components/HeroBackground';
 
-export default async function Hero() {
-    let catUrl;
-    try {
-      const cats = await fetchCatImage();
-      catUrl = cats?.[0]?.url;
-    } catch (error) {
-      console.error("Erro ao buscar imagem do gato:", error);
-      catUrl = '/placeholder.svg';
-    }
-
+// Hero agora é server component, mas o background é client-side
+// para gerenciar cache no localStorage do navegador
+export default function Hero() {
     return (
-        <section 
-          aria-labelledby="hero-title"
-          className="relative min-h-[600px] flex items-center justify-center bg-gradient-to-br"
-          style={{ backgroundImage: catUrl ? `url(${catUrl})` : "none", backgroundSize: 'cover', backgroundPosition: 'center' }}
-        >
-          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+        <HeroBackground>
           <div className="flex flex-col items-center px-4 py-16 text-white relative z-10">
             <h1 id="hero-title" className="text-4xl md:text-5xl font-bold mb-6 w-fit">
               Encontre seu novo melhor amigo
@@ -65,6 +53,6 @@ export default async function Hero() {
               </Button>
             </form>
           </div>
-        </section>
+        </HeroBackground>
     )
 }
