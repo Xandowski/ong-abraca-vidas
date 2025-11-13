@@ -8,11 +8,35 @@ import { useState } from 'react';
 
 const pixKey = '44707136000101';
 const valor = '1.00';
-const nome = 'ONG Abraca Vidas'; // 17 caracteres
+const nome = 'ONG Abraca Vidas';
 const cidade = 'ARARAQUARA';
 const descricao = 'Apoio ao projeto';
 
-const payload = `00020126580014BR.GOV.BCB.PIX0136${pixKey}5204000053039865404${valor}5802BR5917${nome}6009${cidade}621405107wQwNucsGM63040D76`;
+// Payload PIX baseado no formato original que funcionava
+// Apenas corrigindo os tamanhos para os novos valores:
+// - Chave: UUID 36 chars → CNPJ 14 chars (0136 → 0114, campo 26: 58 → 36)
+// - Nome: "Alexandre Morais" 16 chars → "ONG Abraca Vidas" 17 chars (5916 → 5917)
+// - Cidade: "SAO PAULO" 9 chars → "ARARAQUARA" 10 chars (6009 → 6010)
+
+// Calcula CRC16-CCITT (mesmo algoritmo do padrão EMV)
+const calcularCRC16 = (payload) => {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+    }
+  }
+  return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+};
+
+// Monta payload sem o CRC (tudo exceto os últimos 4 dígitos)
+// Nome "ONG Abraca Vidas" = 16 caracteres (não 17!)
+const payloadSemCRC = `00020126360014BR.GOV.BCB.PIX0114${pixKey}5204000053039865404${valor}5802BR5916${nome}6010${cidade}621405107wQwNucsGM6304`;
+
+// Calcula CRC e monta payload final
+const crcCalculado = calcularCRC16(payloadSemCRC);
+const payload = payloadSemCRC + crcCalculado;
 
 export default function PixSupport() {
   const [copied, setCopied] = useState(false);
