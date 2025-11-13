@@ -84,11 +84,16 @@ const Animals = () => {
         
         <section className="container mx-auto px-4 py-6">
           <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex flex-col sm:flex-row gap-4">
+            <form role="search" className="flex flex-col sm:flex-row gap-4" aria-label="Buscar animais">
               <div className="flex items-center gap-2 flex-1 bg-gray-100 rounded-md px-3 py-2">
-                <Search className="h-5 w-5 text-gray-400" />
+                <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <label htmlFor="animal-search" className="sr-only">
+                  Buscar animais por nome ou raça
+                </label>
                 <input
-                  type="text"
+                  id="animal-search"
+                  name="search"
+                  type="search"
                   placeholder="Busque por nome ou raça..."
                   className="bg-transparent border-none focus:outline-none w-full"
                   value={searchTerm}
@@ -97,21 +102,29 @@ const Animals = () => {
               </div>
               
               <Button 
+                type="button"
                 variant="outline"
                 className="flex items-center gap-2"
                 onClick={() => setShowFilters(!showFilters)}
+                aria-expanded={showFilters}
+                aria-controls="filter-panel"
               >
-                <Filter className="h-4 w-4" />
+                <Filter className="h-4 w-4" aria-hidden="true" />
                 Filtros
               </Button>
-            </div>
+            </form>
             
             {showFilters && (
-              <div className="mt-4 pt-4 border-t animate-fade-in">
+              <fieldset id="filter-panel" className="mt-4 pt-4 border-t animate-fade-in">
+                <legend className="sr-only">Filtros de busca</legend>
                 <div className="flex flex-wrap gap-4">
                   <div className="w-full sm:w-auto">
-                    <label className="text-sm font-medium block mb-1">Tipo</label>
+                    <label htmlFor="filter-type" className="text-sm font-medium block mb-1">
+                      Tipo
+                    </label>
                     <select
+                      id="filter-type"
+                      name="type"
                       className="w-full rounded-md border border-gray-300 px-3 py-2"
                       value={animalType}
                       onChange={(e) => setAnimalType(e.target.value)}
@@ -125,8 +138,12 @@ const Animals = () => {
                   </div>
                   
                   <div className="w-full sm:w-auto">
-                    <label className="text-sm font-medium block mb-1">Tamanho</label>
+                    <label htmlFor="filter-size" className="text-sm font-medium block mb-1">
+                      Tamanho
+                    </label>
                     <select
+                      id="filter-size"
+                      name="size"
                       className="w-full rounded-md border border-gray-300 px-3 py-2"
                       value={animalSize}
                       onChange={(e) => setAnimalSize(e.target.value)}
@@ -139,8 +156,10 @@ const Animals = () => {
                   </div>
                   
                   <div className="w-full sm:w-auto flex items-end">
-                    <label className="flex items-center gap-2">
+                    <label htmlFor="filter-adopted" className="flex items-center gap-2">
                       <input
+                        id="filter-adopted"
+                        name="includeAdopted"
                         type="checkbox"
                         checked={includeAdopted}
                         onChange={(e) => setIncludeAdopted(e.target.checked)}
@@ -151,12 +170,17 @@ const Animals = () => {
                   </div>
                   
                   <div className="w-full sm:w-auto flex items-end ml-auto">
-                    <Button variant="ghost" onClick={resetFilters} className="text-ong-primary">
+                    <Button 
+                      type="button"
+                      variant="ghost" 
+                      onClick={resetFilters} 
+                      className="text-ong-primary"
+                    >
                       Limpar filtros
                     </Button>
                   </div>
                 </div>
-              </div>
+              </fieldset>
             )}
             
             {(searchTerm || animalType !== 'all' || animalSize !== 'all' || includeAdopted) && (
@@ -166,10 +190,14 @@ const Animals = () => {
                 {searchTerm && (
                   <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center gap-1 px-3">
                     Busca: {searchTerm}
-                    <X 
-                      className="h-3 w-3 cursor-pointer" 
+                    <button
+                      type="button"
                       onClick={() => setSearchTerm('')}
-                    />
+                      aria-label="Remover filtro de busca"
+                      className="hover:opacity-70"
+                    >
+                      <X className="h-3 w-3" aria-hidden="true" />
+                    </button>
                   </Badge>
                 )}
                 
@@ -180,10 +208,14 @@ const Animals = () => {
                       animalType === 'cat' ? 'Gato' : 
                       animalType === 'bird' ? 'Ave' : 'Outro'
                     }
-                    <X 
-                      className="h-3 w-3 cursor-pointer" 
+                    <button
+                      type="button"
                       onClick={() => setAnimalType('all')}
-                    />
+                      aria-label="Remover filtro de tipo"
+                      className="hover:opacity-70"
+                    >
+                      <X className="h-3 w-3" aria-hidden="true" />
+                    </button>
                   </Badge>
                 )}
                 
@@ -194,20 +226,28 @@ const Animals = () => {
                       animalSize === 'medium' ? 'Médio' :
                       'Grande'
                     }
-                    <X 
-                      className="h-3 w-3 cursor-pointer" 
+                    <button
+                      type="button"
                       onClick={() => setAnimalSize('all')}
-                    />
+                      aria-label="Remover filtro de tamanho"
+                      className="hover:opacity-70"
+                    >
+                      <X className="h-3 w-3" aria-hidden="true" />
+                    </button>
                   </Badge>
                 )}
                 
                 {includeAdopted && (
                   <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center gap-1 px-3">
                     Incluir adotados
-                    <X 
-                      className="h-3 w-3 cursor-pointer" 
+                    <button
+                      type="button"
                       onClick={() => setIncludeAdopted(false)}
-                    />
+                      aria-label="Remover filtro de incluir adotados"
+                      className="hover:opacity-70"
+                    >
+                      <X className="h-3 w-3" aria-hidden="true" />
+                    </button>
                   </Badge>
                 )}
               </div>
