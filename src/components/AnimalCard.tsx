@@ -468,7 +468,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
                   className="w-full bg-ong-teal hover:bg-teal-600"
                   onClick={() => {
                     const message = `Olá! Estou interessado(a) em adotar ${nameUpdated}.`;
-                    const whatsappUrl = `https://chat.whatsapp.com/EBqcPrjw7Y7Fo2rBeoUVmd?text=${encodeURIComponent(message)}`;
+                    const whatsappUrl = `https://wa.me/5516988002918?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                   }}
                 >

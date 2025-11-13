@@ -6,13 +6,13 @@ import { CheckIcon, CopyIcon } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useState } from 'react';
 
-const pixKey = '0532c395-6d23-4046-92d7-ddd07bdbe59e';
+const pixKey = '44707136000101';
 const valor = '1.00';
-const nome = 'Alexandre Morais';
-const cidade = 'SAO PAULO';
+const nome = 'ONG Abraca Vidas'; // 17 caracteres
+const cidade = 'ARARAQUARA';
 const descricao = 'Apoio ao projeto';
 
-const payload = `00020126580014BR.GOV.BCB.PIX0136${pixKey}5204000053039865404${valor}5802BR5916${nome}6009${cidade}621405107wQwNucsGM63040D76`;
+const payload = `00020126580014BR.GOV.BCB.PIX0136${pixKey}5204000053039865404${valor}5802BR5917${nome}6009${cidade}621405107wQwNucsGM63040D76`;
 
 export default function PixSupport() {
   const [copied, setCopied] = useState(false);

@@ -20,7 +20,7 @@ const Footer = () => {
               <a href="https://www.facebook.com/ongabracavidas" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
                 <SiFacebook className="h-4 w-4" />
               </a>
-              <a href="https://chat.whatsapp.com/EBqcPrjw7Y7Fo2rBeoUVmd" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
+              <a href="https://wa.me/5516988002918" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
                 <SiWhatsapp className="h-4 w-4" />
               </a>
             </div>
