@@ -64,3 +64,18 @@
     @apply bg-ong-orange text-white hover:bg-orange-500 rounded-md px-4 py-2 font-medium transition-colors;
   }
 }
+
+@layer utilities {
+  /* Classe para screen readers - oculta visualmente mas mantém acessível */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
