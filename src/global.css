@@ -49,6 +49,34 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-semibold;
   }
+
+  /* Melhoria de feedback visual de foco para acessibilidade */
+  /* Scroll suave para navegação */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Foco visível e consistente para elementos interativos */
+  /* Usa :focus-visible para mostrar outline apenas em navegação por teclado */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 3px solid #FF9900;
+    outline-offset: 2px;
+  }
+
+  /* Remove outline para cliques com mouse (mantém UX limpa) */
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible),
+  input:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible),
+  select:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 @layer components {
