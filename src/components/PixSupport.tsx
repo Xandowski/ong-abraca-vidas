@@ -7,16 +7,13 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useState } from 'react';
 
 const pixKey = '44707136000101';
-const valor = '1.00';
 const nome = 'ONG Abraca Vidas';
 const cidade = 'ARARAQUARA';
 const descricao = 'Apoio ao projeto';
 
-// Payload PIX baseado no formato original que funcionava
-// Apenas corrigindo os tamanhos para os novos valores:
-// - Chave: UUID 36 chars → CNPJ 14 chars (0136 → 0114, campo 26: 58 → 36)
-// - Nome: "Alexandre Morais" 16 chars → "ONG Abraca Vidas" 17 chars (5916 → 5917)
-// - Cidade: "SAO PAULO" 9 chars → "ARARAQUARA" 10 chars (6009 → 6010)
+// Payload PIX sem valor fixo - permite que usuário digite qualquer quantia
+// Conforme Manual de Padrões PIX do Banco Central (seção 2.6 - QR Code Estático)
+// Quando o campo 54 (valor) está ausente, o app do banco permite entrada livre de valor
 
 // Calcula CRC16-CCITT (mesmo algoritmo do padrão EMV)
 const calcularCRC16 = (payload) => {
@@ -30,9 +27,10 @@ const calcularCRC16 = (payload) => {
   return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
 };
 
-// Monta payload sem o CRC (tudo exceto os últimos 4 dígitos)
-// Nome "ONG Abraca Vidas" = 16 caracteres (não 17!)
-const payloadSemCRC = `00020126360014BR.GOV.BCB.PIX0114${pixKey}5204000053039865404${valor}5802BR5916${nome}6010${cidade}621405107wQwNucsGM6304`;
+// Monta payload SEM o campo 54 (valor) e sem o CRC
+// Campo 54 removido para permitir valor editável pelo usuário
+// Estrutura: 00(versão) 01(tipo) 26(chave) 52(categoria) 53(moeda) 58(país) 59(nome) 60(cidade) 62(txid) 63(CRC placeholder)
+const payloadSemCRC = `00020126360014BR.GOV.BCB.PIX0114${pixKey}520400005303986580205916${nome}6010${cidade}621405107wQwNucsGM6304`;
 
 // Calcula CRC e monta payload final
 const crcCalculado = calcularCRC16(payloadSemCRC);
@@ -66,10 +64,15 @@ export default function PixSupport() {
             Apoie o Projeto
           </Dialog.Title>
           <Dialog.Description id="pix-modal-description" className="text-sm text-gray-600 text-center mb-4">
-            Use o QR Code para apoiar com R$ {valor}
+            Escaneie o QR Code e digite o valor que desejar no seu banco
           </Dialog.Description>
-          <div className="flex justify-center mb-4" role="img" aria-label={`QR Code Pix para doação de R$ ${valor} - Chave CNPJ ${pixKey}`}>
+          <div className="flex justify-center mb-3" role="img" aria-label={`QR Code Pix para doação com valor livre - Chave CNPJ ${pixKey}`}>
             <QRCodeSVG value={payload} size={180} />
+          </div>
+          
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+            <p className="text-xs text-green-800 text-center font-medium mb-1">💚 Sugestão de valores:</p>
+            <p className="text-sm text-green-700 text-center font-semibold">R$ 10 • R$ 20 • R$ 50 • R$ 100</p>
           </div>
 
           <p className="text-sm text-center text-gray-600">Ou copie a chave Pix:</p>
