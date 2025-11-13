@@ -101,7 +101,7 @@ export function ContactForm() {
           name="subject"
           value={formData.subject}
           onChange={handleChange}
-          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-teal focus:border-ong-teal',
+          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-primary focus:border-ong-primary',
             errors.subject ? 'border-red-500' : 'border-gray-300'
           ].join(' ')}
           placeholder="Digite o assunto"
@@ -136,7 +136,7 @@ export function ContactForm() {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-teal focus:border-ong-teal',
+          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-primary focus:border-ong-primary',
             errors.email ? 'border-red-500' : 'border-gray-300'
           ].join(' ')}
           placeholder="Digite seu email"
@@ -172,7 +172,7 @@ export function ContactForm() {
           value={formData.message}
           onChange={handleChange}
           rows={4}
-          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-teal focus:border-ong-teal',
+          className={['mt-1 block w-full rounded-md shadow-sm focus:ring-ong-primary focus:border-ong-primary',
             errors.message ? 'border-red-500' : 'border-gray-300'
           ].join(' ')}
           placeholder="Digite sua mensagem"
@@ -194,7 +194,7 @@ export function ContactForm() {
 
       <Button 
         type="submit"
-        className="bg-ong-teal text-white hover:bg-teal-600 w-full"
+        className="bg-ong-primary text-white hover:bg-ong-orange-dark w-full"
         disabled={submitting}
         aria-busy={submitting}
       >

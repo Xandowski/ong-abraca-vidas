@@ -246,6 +246,34 @@ const OngDashboard = () => {
     }
   };
 
+  const handleUpdateAnimalStatus = async (id: number, isAdopted: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('animals')
+        .update({ isAdopted })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Atualiza o estado local
+      setAnimals(animals.map(animal => 
+        animal.id === id ? { ...animal, isAdopted } : animal
+      ));
+
+      toast({
+        title: "Status atualizado",
+        description: `Animal marcado como ${isAdopted ? 'adotado' : 'disponível'}.`,
+      });
+    } catch (error) {
+      console.error('Error updating animal status:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao atualizar status",
+        description: "Não foi possível atualizar o status. Tente novamente.",
+      });
+    }
+  };
+
   const filteredAnimals = animals.filter((animal) => {
     const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                        (animal.breed && animal.breed.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -263,9 +291,12 @@ const OngDashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Pular para o conteúdo principal
+      </a>
       <Navbar />
       
-      <main className="flex-grow bg-ong-light">
+      <main id="main-content" className="flex-grow bg-ong-light">
         <section className="bg-ong-dark text-white py-6">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -276,7 +307,7 @@ const OngDashboard = () => {
               
               <Button 
                 onClick={() => setIsAddAnimalOpen(true)}
-                className="mt-4 md:mt-0 bg-ong-teal hover:bg-teal-600"
+                className="mt-4 md:mt-0 bg-ong-primary hover:bg-ong-orange-dark"
               >
                 <PlusCircle size={16} className="mr-2" />
                 Cadastrar Animal
@@ -325,42 +356,60 @@ const OngDashboard = () => {
           <div className="bg-white rounded-lg shadow">
             <div className="p-4 border-b">
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex items-center gap-2 flex-1 bg-gray-100 rounded-md px-3 py-2">
-                  <Search className="h-5 w-5 text-gray-400" />
+                <form role="search" className="flex items-center gap-2 flex-1 bg-gray-100 rounded-md px-3 py-2">
+                  <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <label htmlFor="dashboard-search" className="sr-only">
+                    Buscar animal por nome ou raça
+                  </label>
                   <input
-                    type="text"
+                    id="dashboard-search"
+                    name="search"
+                    type="search"
                     placeholder="Buscar animal..."
                     className="bg-transparent border-none focus:outline-none w-full"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                </div>
+                </form>
                 
                 <div className="flex gap-2">
-                  <select
-                    className="rounded-md border border-gray-300 px-3 py-2"
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value as 'all' | 'available' | 'adopted')}
-                  >
-                    <option value="all">Todos</option>
-                    <option value="available">Para adoção</option>
-                    <option value="adopted">Adotados</option>
-                  </select>
+                  <div>
+                    <label htmlFor="status-filter" className="sr-only">
+                      Filtrar por status de adoção
+                    </label>
+                    <select
+                      id="status-filter"
+                      name="status"
+                      className="rounded-md border border-gray-300 px-3 py-2"
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value as 'all' | 'available' | 'adopted')}
+                    >
+                      <option value="all">Todos</option>
+                      <option value="available">Para adoção</option>
+                      <option value="adopted">Adotados</option>
+                    </select>
+                  </div>
                   
-                  <div className="border rounded-md p-1 flex gap-1">
+                  <div className="border rounded-md p-1 flex gap-1" role="group" aria-label="Modo de visualização">
                     <Button
+                      type="button"
                       variant={viewMode === 'grid' ? 'default' : 'ghost'}
                       size="icon"
                       onClick={() => setViewMode('grid')}
+                      aria-label="Visualização em grade"
+                      aria-pressed={viewMode === 'grid'}
                     >
-                      <LayoutGrid size={16} />
+                      <LayoutGrid size={16} aria-hidden="true" />
                     </Button>
                     <Button
+                      type="button"
                       variant={viewMode === 'list' ? 'default' : 'ghost'}
                       size="icon"
                       onClick={() => setViewMode('list')}
+                      aria-label="Visualização em lista"
+                      aria-pressed={viewMode === 'list'}
                     >
-                      <List size={16} />
+                      <List size={16} aria-hidden="true" />
                     </Button>
                   </div>
                 </div>
@@ -415,7 +464,7 @@ const OngDashboard = () => {
                               >
                                 <Trash2 size={14} /> Excluir
                               </DropdownMenuItem>
-                              {/* {!animal.isAdopted && (
+                              {!animal.isAdopted && (
                                 <DropdownMenuItem 
                                   className="flex items-center gap-2 text-green-600"
                                   onClick={() => handleUpdateAnimalStatus(animal.id, true)}
@@ -430,7 +479,7 @@ const OngDashboard = () => {
                                 >
                                   <PawPrint size={14} /> Marcar como disponível
                                 </DropdownMenuItem>
-                              )} */}
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -505,7 +554,7 @@ const OngDashboard = () => {
                                 >
                                   <Trash2 size={14} />
                                 </Button>
-                                {/* {!animal.isAdopted ? (
+                                {!animal.isAdopted ? (
                                   <Button 
                                     variant="ghost" 
                                     size="sm" 
@@ -523,7 +572,7 @@ const OngDashboard = () => {
                                   >
                                     <PawPrint size={14} />
                                   </Button>
-                                )} */}
+                                )}
                               </div>
                             </td>
                           </tr>
@@ -558,14 +607,18 @@ const OngDashboard = () => {
           </DialogHeader>
           
           <form onSubmit={handleCreateAnimal}>
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-medium mb-4">Informações Básicas</h3>
+            <fieldset className="space-y-6">
+              <legend className="font-medium mb-4 text-base">Informações Básicas</legend>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Nome</label>
+                    <label htmlFor="animal-name" className="block text-sm font-medium mb-1">
+                      Nome
+                    </label>
                     <input 
+                      id="animal-name"
+                      name="name"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="Nome do animal"
                       value={name}
@@ -575,8 +628,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Tipo</label>
+                    <label htmlFor="animal-type" className="block text-sm font-medium mb-1">
+                      Tipo
+                    </label>
                     <select 
+                      id="animal-type"
+                      name="type"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={type}
                       onChange={(e) => setType(e.target.value)}
@@ -589,8 +646,13 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Idade</label>
+                    <label htmlFor="animal-age" className="block text-sm font-medium mb-1">
+                      Idade
+                    </label>
                     <input 
+                      id="animal-age"
+                      name="age"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="Ex: 2"
                       value={age}
@@ -600,8 +662,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Sexo</label>
+                    <label htmlFor="animal-gender" className="block text-sm font-medium mb-1">
+                      Sexo
+                    </label>
                     <select 
+                      id="animal-gender"
+                      name="gender"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
@@ -613,8 +679,13 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Raça (opcional)</label>
+                    <label htmlFor="animal-breed" className="block text-sm font-medium mb-1">
+                      Raça (opcional)
+                    </label>
                     <input 
+                      id="animal-breed"
+                      name="breed"
+                      type="text"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       placeholder="SRD se não souber"
                       value={breed}
@@ -623,8 +694,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Porte</label>
+                    <label htmlFor="animal-size" className="block text-sm font-medium mb-1">
+                      Porte
+                    </label>
                     <select 
+                      id="animal-size"
+                      name="size"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
                       value={size}
                       onChange={(e) => setSize(e.target.value)}
@@ -637,7 +712,9 @@ const OngDashboard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">URL da Imagem</label>
+                    <label className="block text-sm font-medium mb-1">
+                      Carregar imagens
+                    </label>
                     <Uploadzone
                       files={files}
                       setFiles={setFiles}
@@ -647,8 +724,12 @@ const OngDashboard = () => {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Descrição</label>
+                    <label htmlFor="animal-description" className="block text-sm font-medium mb-1">
+                      Descrição
+                    </label>
                     <textarea 
+                      id="animal-description"
+                      name="description"
                       className="w-full border border-gray-300 rounded-md px-3 py-2 h-24"
                       placeholder="Descreva o animal, seu temperamento, histórico..." 
                       value={description}
@@ -657,8 +738,7 @@ const OngDashboard = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
+            </fieldset>
             
             <div className="flex justify-end gap-3 mt-4">
               <Button type="button" variant="ghost" onClick={() => {
@@ -667,7 +747,7 @@ const OngDashboard = () => {
               }}>
                 Cancelar
               </Button>
-              <Button type="submit" className="bg-ong-teal hover:bg-teal-600">
+              <Button type="submit" className="bg-ong-primary hover:bg-ong-orange-dark">
                 Cadastrar Animal
               </Button>
             </div>

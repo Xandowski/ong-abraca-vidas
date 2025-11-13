@@ -14,9 +14,12 @@ export const dynamic = 'force-dynamic';
 const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Pular para o conteúdo principal
+      </a>
       <Navbar />
       
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         <Suspense fallback={<HeroSkeleton />}>
           <Hero />
         </Suspense>
@@ -27,7 +30,7 @@ const Index = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-ong-dark">
                 Animais em Destaque
               </h2>
-              <Link href="/animais" className="text-ong-teal font-medium hover:underline">
+              <Link href="/animais" className="text-ong-primary font-medium hover:underline">
                 Ver todos →
               </Link>
             </div>

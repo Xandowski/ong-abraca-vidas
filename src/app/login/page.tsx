@@ -153,14 +153,14 @@ const Login = () => {
                 />
                 
                 <div className="text-right">
-                  <Link href="/forgot-password" className="text-sm text-ong-teal hover:underline">
+                  <Link href="/forgot-password" className="text-sm text-ong-primary hover:underline">
                     Esqueceu sua senha?
                   </Link>
                 </div>
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-ong-teal hover:bg-teal-600" 
+                  className="w-full bg-ong-primary hover:bg-ong-orange-dark" 
                   disabled={isLoading}
                 >
                   {isLoading ? "Entrando..." : "Entrar"}
@@ -169,7 +169,7 @@ const Login = () => {
                 <div className="text-center mt-6">
                   {/* <p className="text-gray-600">
                     Não tem uma conta?{" "}
-                    <Link href="/register" className="text-ong-teal hover:underline">
+                    <Link href="/register" className="text-ong-primary hover:underline">
                       Cadastre-se
                     </Link>
                   </p> */}

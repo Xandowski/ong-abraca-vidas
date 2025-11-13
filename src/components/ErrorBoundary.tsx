@@ -42,7 +42,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                 this.setState({ hasError: false });
                 window.location.reload();
               }}
-              className="bg-ong-teal hover:bg-teal-600"
+              className="bg-ong-primary hover:bg-ong-orange-dark"
             >
               Tentar Novamente
             </Button>

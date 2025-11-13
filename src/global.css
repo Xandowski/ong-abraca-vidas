@@ -49,6 +49,34 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-semibold;
   }
+
+  /* Melhoria de feedback visual de foco para acessibilidade */
+  /* Scroll suave para navegação */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Foco visível e consistente para elementos interativos */
+  /* Usa :focus-visible para mostrar outline apenas em navegação por teclado */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 3px solid #FF9900;
+    outline-offset: 2px;
+  }
+
+  /* Remove outline para cliques com mouse (mantém UX limpa) */
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible),
+  input:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible),
+  select:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 @layer components {
@@ -57,10 +85,43 @@
   }
   
   .btn-primary {
-    @apply bg-ong-teal text-white hover:bg-teal-600 rounded-md px-4 py-2 font-medium transition-colors;
+    @apply bg-ong-primary text-white hover:bg-ong-orange-dark rounded-md px-4 py-2 font-medium transition-colors;
   }
   
   .btn-secondary {
     @apply bg-ong-orange text-white hover:bg-orange-500 rounded-md px-4 py-2 font-medium transition-colors;
+  }
+}
+
+@layer utilities {
+  /* Classe para screen readers - oculta visualmente mas mantém acessível */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Skip links - aparecem apenas quando recebem foco (Tab) */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+    border-radius: 0 0 4px 0;
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 0;
   }
 }
