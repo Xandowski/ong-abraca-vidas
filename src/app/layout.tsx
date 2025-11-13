@@ -1,6 +1,7 @@
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { StandaloneRedirect } from '@/components/StandaloneRedirect';
 import { SupabaseProvider } from '@/components/SupabaseProvider';
+import { VersionInfo } from '@/components/VersionInfo';
 import { createServerClient } from '@supabase/ssr';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body>
+        <VersionInfo />
         <ClientProviders>
           <SupabaseProvider initialSession={session}>
             <ErrorBoundary>
