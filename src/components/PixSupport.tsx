@@ -56,31 +56,48 @@ export default function PixSupport() {
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-fadeIn z-40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6 z-50">
-          <Dialog.Title className="text-xl font-bold mb-2 text-center">Apoie o Projeto</Dialog.Title>
-            <Dialog.Description className="text-sm text-gray-600 text-center mb-4">
-              Use o QR Code para apoiar com R$ {valor}
-            </Dialog.Description>
-          <div className="flex justify-center mb-4">
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-fadeIn z-40" aria-hidden="true" />
+        <Dialog.Content 
+          className="fixed top-1/2 left-1/2 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6 z-50"
+          aria-labelledby="pix-modal-title"
+          aria-describedby="pix-modal-description"
+        >
+          <Dialog.Title id="pix-modal-title" className="text-xl font-bold mb-2 text-center">
+            Apoie o Projeto
+          </Dialog.Title>
+          <Dialog.Description id="pix-modal-description" className="text-sm text-gray-600 text-center mb-4">
+            Use o QR Code para apoiar com R$ {valor}
+          </Dialog.Description>
+          <div className="flex justify-center mb-4" role="img" aria-label={`QR Code Pix para doação de R$ ${valor} - Chave CNPJ ${pixKey}`}>
             <QRCodeSVG value={payload} size={180} />
           </div>
 
-          <div className="text-sm text-center text-gray-600">Ou copie a chave Pix:</div>
+          <p className="text-sm text-center text-gray-600">Ou copie a chave Pix:</p>
           <div className="flex items-center justify-center mt-1 gap-2">
-            <code className="bg-gray-100 px-2 py-1 rounded">{pixKey}</code>
+            <code className="bg-gray-100 px-2 py-1 rounded" aria-label="Chave Pix CNPJ">{pixKey}</code>
             <button
               onClick={handleCopy}
               className="text-blue-600 hover:text-blue-800"
-              title="Copiar chave Pix"
+              aria-label={copied ? "Chave copiada!" : "Copiar chave Pix"}
+              type="button"
             >
-              {copied ? <CheckIcon size={18} /> : <CopyIcon size={18} />}
+              {copied ? <CheckIcon size={18} aria-hidden="true" /> : <CopyIcon size={18} aria-hidden="true" />}
             </button>
+          </div>
+          <div 
+            role="status" 
+            aria-live="polite" 
+            aria-atomic="true"
+            className="sr-only"
+          >
+            {copied ? "Chave Pix copiada para a área de transferência" : ""}
           </div>
 
           <Dialog.Close asChild>
             <button
+              type="button"
               className="mt-6 w-full text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded"
+              aria-label="Fechar modal de doação"
             >
               Fechar
             </button>
