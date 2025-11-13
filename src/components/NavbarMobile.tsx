@@ -26,21 +26,21 @@ export function NavbarMobile() {
           <div className="flex flex-col gap-3 pb-3">
             <Link 
               href="/animais" 
-              className="text-gray-700 hover:text-ong-teal py-2 transition-colors"
+              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Adotar
             </Link>
             <a 
               href="/#about" 
-              className="text-gray-700 hover:text-ong-teal py-2 transition-colors"
+              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Sobre
             </a>
             <a 
               href="/#contact" 
-              className="text-gray-700 hover:text-ong-teal py-2 transition-colors"
+              className="text-gray-700 hover:text-ong-primary py-2 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Contato

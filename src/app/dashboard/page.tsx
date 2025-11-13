@@ -304,7 +304,7 @@ const OngDashboard = () => {
               
               <Button 
                 onClick={() => setIsAddAnimalOpen(true)}
-                className="mt-4 md:mt-0 bg-ong-teal hover:bg-teal-600"
+                className="mt-4 md:mt-0 bg-ong-primary hover:bg-ong-orange-dark"
               >
                 <PlusCircle size={16} className="mr-2" />
                 Cadastrar Animal
@@ -695,7 +695,7 @@ const OngDashboard = () => {
               }}>
                 Cancelar
               </Button>
-              <Button type="submit" className="bg-ong-teal hover:bg-teal-600">
+              <Button type="submit" className="bg-ong-primary hover:bg-ong-orange-dark">
                 Cadastrar Animal
               </Button>
             </div>

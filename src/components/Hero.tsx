@@ -30,7 +30,7 @@ export default async function Hero() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/animais">
-                <Button size="lg" className="bg-white font-bold text-ong-teal hover:bg-gray-100">
+                <Button size="lg" className="bg-white font-bold text-ong-primary hover:bg-gray-100">
                   Adotar
                 </Button>
               </Link>
@@ -43,7 +43,7 @@ export default async function Hero() {
                 placeholder="Buscar animais por tipo, porte..."
                 className="rounded-full py-3 pl-6 pr-3 w-full focus:outline-none text-black"
               />
-              <Button size="icon" className="rounded-full bg-ong-teal h-11 w-11">
+              <Button size="icon" className="rounded-full bg-ong-primary h-11 w-11">
                 <Search className="h-5 w-5" />
               </Button>
             </div>

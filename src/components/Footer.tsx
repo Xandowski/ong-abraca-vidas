@@ -15,13 +15,13 @@ const Footer = () => {
               Venha conosco ser a mudança!
             </p>
             <div className="flex space-x-4">
-              <a href="https://www.instagram.com/ongabracavidas/" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
+              <a href="https://www.instagram.com/ongabracavidas/" target="_blank" className="text-gray-300 hover:text-ong-primary transition-colors">
                 <SiInstagram className="h-4 w-4" />
               </a>
-              <a href="https://www.facebook.com/ongabracavidas" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
+              <a href="https://www.facebook.com/ongabracavidas" target="_blank" className="text-gray-300 hover:text-ong-primary transition-colors">
                 <SiFacebook className="h-4 w-4" />
               </a>
-              <a href="https://wa.me/5516988002918" target="_blank" className="text-gray-300 hover:text-ong-teal transition-colors">
+              <a href="https://wa.me/5516988002918" target="_blank" className="text-gray-300 hover:text-ong-primary transition-colors">
                 <SiWhatsapp className="h-4 w-4" />
               </a>
             </div>
@@ -31,17 +31,17 @@ const Footer = () => {
             <h3 className="font-heading text-xl mb-4">Links Úteis</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/animais" className="text-gray-300 hover:text-ong-teal transition-colors">
+                <Link href="/animais" className="text-gray-300 hover:text-ong-primary transition-colors">
                   Animais para Adoção
                 </Link>
               </li>
               <li>
-                <a href="#about" className="text-gray-300 hover:text-ong-teal transition-colors">
+                <a href="#about" className="text-gray-300 hover:text-ong-primary transition-colors">
                   Sobre Nós
                 </a>
               </li>
               <li>
-                <a href="#contact" className="text-gray-300 hover:text-ong-teal transition-colors">
+                <a href="#contact" className="text-gray-300 hover:text-ong-primary transition-colors">
                   Entre em Contato
                 </a>
               </li>
@@ -54,7 +54,7 @@ const Footer = () => {
               <p className="mb-2">Araraquara, SP - Brasil</p>
               <p className="flex items-center gap-2 mb-2">
                 <SiMailboxdotorg className="h-4 w-4" />
-                <a href="mailto:contato@Abraça Vidas.org" className="hover:text-ong-teal transition-colors">
+                <a href="mailto:contato@Abraça Vidas.org" className="hover:text-ong-primary transition-colors">
                   contato@abracavidas.org
                 </a>
               </p>

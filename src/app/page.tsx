@@ -27,7 +27,7 @@ const Index = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-ong-dark">
                 Animais em Destaque
               </h2>
-              <Link href="/animais" className="text-ong-teal font-medium hover:underline">
+              <Link href="/animais" className="text-ong-primary font-medium hover:underline">
                 Ver todos →
               </Link>
             </div>

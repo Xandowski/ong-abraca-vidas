@@ -64,11 +64,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				ong: {
+					// Cor primária baseada na identidade visual oficial
+					primary: '#FF9900', // Laranja vibrante da ONG
+					orange: '#FF9900', // Mesmo laranja (manter compatibilidade)
+					'orange-dark': '#E68A00', // Laranja mais escuro para hover
+					'orange-light': '#FFAD33', // Laranja mais claro
+					// Cores de suporte
+					light: '#FFF5E6', // Bege clarinho (complementa laranja)
+					dark: '#2D1B00', // Marrom escuro (combina com laranja)
+					gray: '#F5F5F5', // Cinza neutro
+					// Mantendo teal como secundária (caso necessário)
 					teal: '#2794eb',
-					orange: '#FF8C42',
-					light: '#F9F7F7',
-					dark: '#17252A',
-					gray: '#DEF2F1',
 				}
 			},
 			borderRadius: {

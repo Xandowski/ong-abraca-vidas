@@ -10,18 +10,18 @@ export default function Navbar() {
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="logo" width={40} height={40}/>
+          <Image src="/logo.png" alt="ONG Abraça Vidas - Logo" width={40} height={40} className="rounded-md"/>
           <span className="text-xl font-heading font-bold text-ong-dark">Abraça Vidas</span>
         </Link>
         
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/animais" className="text-gray-700 hover:text-ong-teal transition-colors">
+          <Link href="/animais" className="text-gray-700 hover:text-ong-primary transition-colors">
             Adotar
           </Link>
-          <a href="/#about" className="text-gray-700 hover:text-ong-teal transition-colors">
+          <a href="/#about" className="text-gray-700 hover:text-ong-primary transition-colors">
             Sobre
           </a>
-          <a href="/#contact" className="text-gray-700 hover:text-ong-teal transition-colors">
+          <a href="/#contact" className="text-gray-700 hover:text-ong-primary transition-colors">
             Contato
           </a>
           

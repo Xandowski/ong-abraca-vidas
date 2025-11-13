@@ -151,7 +151,7 @@ const Animals = () => {
                   </div>
                   
                   <div className="w-full sm:w-auto flex items-end ml-auto">
-                    <Button variant="ghost" onClick={resetFilters} className="text-ong-teal">
+                    <Button variant="ghost" onClick={resetFilters} className="text-ong-primary">
                       Limpar filtros
                     </Button>
                   </div>

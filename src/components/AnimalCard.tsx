@@ -214,7 +214,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
           
           <Button 
             variant="outline" 
-            className="w-full border-ong-teal text-ong-teal hover:bg-ong-teal hover:text-white transition-colors flex items-center justify-center gap-1"
+            className="w-full border-ong-primary text-ong-primary hover:bg-ong-primary hover:text-white transition-colors flex items-center justify-center gap-1"
             onClick={() => isAuthenticated ? setIsEditAnimalOpen(true) : setShowDetails(true)}
           >
             <Info size={16} />
@@ -373,7 +373,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
               }}>
                 Cancelar
               </Button>
-              <Button type="submit" className="bg-ong-teal hover:bg-teal-600">
+              <Button type="submit" className="bg-ong-primary hover:bg-ong-orange-dark">
                 Atualizar Animal
               </Button>
             </div>
@@ -465,7 +465,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
             {!isAdopted && (
               <div className="pt-4 border-t">
                 <Button 
-                  className="w-full bg-ong-teal hover:bg-teal-600"
+                  className="w-full bg-ong-primary hover:bg-ong-orange-dark"
                   onClick={() => {
                     const message = `Olá! Estou interessado(a) em adotar ${nameUpdated}.`;
                     const whatsappUrl = `https://wa.me/5516988002918?text=${encodeURIComponent(message)}`;

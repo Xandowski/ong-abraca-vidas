@@ -57,7 +57,7 @@
   }
   
   .btn-primary {
-    @apply bg-ong-teal text-white hover:bg-teal-600 rounded-md px-4 py-2 font-medium transition-colors;
+    @apply bg-ong-primary text-white hover:bg-ong-orange-dark rounded-md px-4 py-2 font-medium transition-colors;
   }
   
   .btn-secondary {

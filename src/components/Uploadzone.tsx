@@ -17,8 +17,8 @@ const Uploadzone = ({
             <div 
                 className={`
                 border-2 border-dashed rounded-lg p-6
-                ${files.length > 0 ? 'border-teal-500' : 'border-gray-300'}
-                hover:border-teal-500 transition-colors
+                ${files.length > 0 ? 'border-ong-orange' : 'border-gray-300'}
+                hover:border-ong-orange transition-colors
                 flex flex-col items-center justify-center
                 relative
                 `}>
@@ -72,7 +72,7 @@ const Uploadzone = ({
                 <div className="w-full mt-4">
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
-                        className="h-full bg-teal-500 transition-all duration-300"
+                        className="h-full bg-ong-orange transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                     />
                     </div>
