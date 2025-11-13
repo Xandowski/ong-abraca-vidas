@@ -37,8 +37,9 @@ export function NavbarAuth() {
       size="lg" 
       className="w-14 hover:bg-transparent hover:text-red-500"
       onClick={handleLogout}
+      aria-label="Sair da conta"
     >
-      <LogOut className='hover:cursor-pointer'/> Sair
+      <LogOut className='hover:cursor-pointer' aria-hidden="true" /> Sair
     </Button>
   );
 }
