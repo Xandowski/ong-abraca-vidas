@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { CiHeart } from "react-icons/ci";
 import { SiFacebook, SiInstagram, SiMailboxdotorg, SiWhatsapp } from 'react-icons/si';
+import { Lock } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -65,6 +66,13 @@ const Footer = () => {
           <p className="flex items-center justify-center gap-1">
             Feito com {<CiHeart className='h-5 w-5 text-ong-orange'/>} por Abraça Vidas &copy; {new Date().getFullYear()}
           </p>
+          <Link 
+            href="/login" 
+            className="inline-flex items-center gap-1 mt-3 text-xs text-gray-500 hover:text-gray-300 transition-colors"
+          >
+            <Lock className="h-3 w-3" />
+            <span>Admin</span>
+          </Link>
         </div>
       </div>
     </footer>
