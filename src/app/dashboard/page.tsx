@@ -47,6 +47,7 @@ const OngDashboard = () => {
   const [name, setName] = useState('');
   const [type, setType] = useState('dog');
   const [age, setAge] = useState('');
+  const [ageUnit, setAgeUnit] = useState<'years' | 'months'>('years');
   const [gender, setGender] = useState('male');
   const [breed, setBreed] = useState('');
   const [size, setSize] = useState('medium');
@@ -61,6 +62,7 @@ const OngDashboard = () => {
     setName('');
     setType('dog');
     setAge('');
+    setAgeUnit('years');
     setGender('male');
     setBreed('');
     setSize('medium');
@@ -177,7 +179,8 @@ const OngDashboard = () => {
       const newAnimal = {
         name,
         type,
-        age,
+        age: ageUnit === 'years' ? parseInt(age) : 0,
+        ageMonth: ageUnit === 'months' ? parseInt(age) : null,
         gender,
         breed: breed || 'SRD',
         size,
@@ -529,7 +532,10 @@ const OngDashboard = () => {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm">{animal.breed || 'SRD'}</div>
                               <div className="text-sm text-gray-500">
-                                {animal.age} • {animal.gender === 'male' ? 'Macho' : 'Fêmea'}
+                                {animal.age === 0 && animal.ageMonth 
+                                  ? `${animal.ageMonth} ${animal.ageMonth === 1 ? 'mês' : 'meses'}`
+                                  : `${animal.age} ${animal.age === 1 ? 'ano' : 'anos'}`
+                                } • {animal.gender === 'male' ? 'Macho' : 'Fêmea'}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -645,20 +651,60 @@ const OngDashboard = () => {
                     </select>
                   </div>
                   
-                  <div>
-                    <label htmlFor="animal-age" className="block text-sm font-medium mb-1">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium mb-2">
                       Idade
                     </label>
+                    
+                    <div className="flex gap-6 mb-3">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input 
+                          type="radio"
+                          name="ageUnit"
+                          value="years"
+                          checked={ageUnit === 'years'}
+                          onChange={(e) => {
+                            setAgeUnit('years');
+                            setAge('');
+                          }}
+                          className="w-4 h-4 text-ong-primary"
+                        />
+                        <span>Anos</span>
+                      </label>
+                      
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input 
+                          type="radio"
+                          name="ageUnit"
+                          value="months"
+                          checked={ageUnit === 'months'}
+                          onChange={(e) => {
+                            setAgeUnit('months');
+                            setAge('');
+                          }}
+                          className="w-4 h-4 text-ong-primary"
+                        />
+                        <span>Meses (para filhotes)</span>
+                      </label>
+                    </div>
+                    
                     <input 
                       id="animal-age"
                       name="age"
-                      type="text"
+                      type="number"
+                      min={ageUnit === 'months' ? '1' : '0'}
+                      max={ageUnit === 'months' ? '11' : undefined}
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Ex: 2"
+                      placeholder={ageUnit === 'months' ? 'Ex: 6' : 'Ex: 2'}
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
                       required
                     />
+                    {ageUnit === 'months' && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Para animais com menos de 1 ano (máximo 11 meses)
+                      </p>
+                    )}
                   </div>
                   
                   <div>
