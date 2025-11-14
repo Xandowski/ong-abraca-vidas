@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { NavbarAuth } from './NavbarAuth';
+import { NavbarDashboardLink } from './NavbarDashboardLink';
 import { NavbarMobile } from './NavbarMobile';
 import PixSupport from './PixSupport';
 
@@ -24,6 +25,10 @@ export default function Navbar() {
           <a href="/#contact" className="text-gray-700 hover:text-ong-primary transition-colors">
             Contato
           </a>
+          
+          <Suspense fallback={null}>
+            <NavbarDashboardLink />
+          </Suspense>
           
           <Suspense fallback={null}>
             <PixSupport />

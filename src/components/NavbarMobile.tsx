@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { NavbarAuth } from './NavbarAuth';
+import { NavbarDashboardLink } from './NavbarDashboardLink';
 import Link from 'next/link';
 import PixSupport from './PixSupport';
 
@@ -64,6 +65,9 @@ export function NavbarMobile() {
               >
                 Contato
               </a>
+            </li>
+            <li onClick={() => setIsMenuOpen(false)}>
+              <NavbarDashboardLink />
             </li>
             <li>
               <NavbarAuth />
