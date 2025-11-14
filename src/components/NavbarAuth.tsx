@@ -42,7 +42,7 @@ export function NavbarAuth() {
           className="hover:bg-transparent hover:text-ong-primary"
         >
           <Lock className='h-5 w-5' aria-hidden="true" />
-          <span className="hidden md:inline ml-1">Senha</span>
+          <span className="ml-1">Senha</span>
         </Button>
       </Link>
 
@@ -55,7 +55,7 @@ export function NavbarAuth() {
         aria-label="Sair da conta"
       >
         <LogOut className='h-5 w-5' aria-hidden="true" />
-        <span className="hidden md:inline ml-1">Sair</span>
+        <span className="ml-1">Sair</span>
       </Button>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PawPrint, Info, Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { NavbarAuth } from './NavbarAuth';
@@ -42,28 +42,31 @@ export function NavbarMobile() {
             <li>
               <Link 
                 href="/animais" 
-                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Adotar
+                <PawPrint className="h-5 w-5" aria-hidden="true" />
+                <span>Adotar</span>
               </Link>
             </li>
             <li>
               <a 
                 href="/#about" 
-                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Sobre
+                <Info className="h-5 w-5" aria-hidden="true" />
+                <span>Sobre</span>
               </a>
             </li>
             <li>
               <a 
                 href="/#contact" 
-                className="text-gray-700 hover:text-ong-primary py-2 transition-colors block"
+                className="text-gray-700 hover:text-ong-primary py-2 transition-colors flex items-center gap-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Contato
+                <Mail className="h-5 w-5" aria-hidden="true" />
+                <span>Contato</span>
               </a>
             </li>
             <li onClick={() => setIsMenuOpen(false)}>
