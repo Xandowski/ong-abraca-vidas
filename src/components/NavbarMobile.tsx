@@ -3,8 +3,9 @@
 import { Menu, X, PawPrint, Info, Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { NavbarAuth } from './NavbarAuth';
 import { NavbarDashboardLink } from './NavbarDashboardLink';
+import { NavbarSenhaLink } from './NavbarSenhaLink';
+import { NavbarSairButton } from './NavbarSairButton';
 import Link from 'next/link';
 import PixSupport from './PixSupport';
 
@@ -109,7 +110,10 @@ export function NavbarMobile() {
                 <NavbarDashboardLink />
               </li>
               <li onClick={() => setIsMenuOpen(false)}>
-                <NavbarAuth />
+                <NavbarSenhaLink />
+              </li>
+              <li onClick={() => setIsMenuOpen(false)}>
+                <NavbarSairButton />
               </li>
             </ul>
           </nav>

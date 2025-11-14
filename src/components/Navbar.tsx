@@ -35,7 +35,7 @@ export default function Navbar() {
           </Suspense>
           
           {/* Área administrativa (condicional) */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3">
             <Suspense fallback={null}>
               <NavbarDashboardLink />
             </Suspense>
