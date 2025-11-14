@@ -98,8 +98,8 @@ const Login = () => {
         <div className="w-full max-w-md px-4">
           <div className="bg-white rounded-lg shadow-md p-8">
             <div className="text-center mb-6">
-              <div className="inline-flex rounded-full p-3 mb-4">
-                <Image src="/logo.svg" alt="logo" width={40} height={40}/>
+              <div className="inline-flex mb-4">
+                <Image src="/logo.png" alt="ONG Abraça Vidas - Logo" width={80} height={80} className="rounded-md"/>
               </div>
               <h1 className="text-2xl font-bold text-ong-dark">Bem-vindo de volta</h1>
               <p className="text-gray-600 mt-1">Faça login para continuar</p>

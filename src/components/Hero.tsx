@@ -21,7 +21,7 @@ export default function Hero() {
             
             <nav aria-label="Ações principais" className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/animais">
-                <Button size="lg" className="bg-white font-bold text-ong-primary hover:bg-gray-100">
+                <Button size="lg" className="bg-ong-primary font-bold text-white hover:bg-ong-orange-dark">
                   Adotar
                 </Button>
               </Link>
@@ -30,7 +30,7 @@ export default function Hero() {
             
             <form 
               role="search" 
-              className="mt-10 max-w-xl mx-auto bg-white rounded-full p-1 flex items-center shadow-lg"
+              className="mt-10 w-full max-w-2xl mx-auto bg-white rounded-full p-1 flex items-center shadow-lg"
               aria-label="Buscar animais para adoção"
             >
               <label htmlFor="hero-search" className="sr-only">

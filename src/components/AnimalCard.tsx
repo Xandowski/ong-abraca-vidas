@@ -33,6 +33,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
   type,
   breed,
   age,
+  ageMonth,
   gender,
   size,
   imageUrl,
@@ -45,6 +46,13 @@ const AnimalCard: React.FC<AnimalProps> = ({
   uploading,
   onAnimalUpdated
 }) => {
+  // Formata a idade para exibição
+  const formatAge = () => {
+    if (age === 0 && ageMonth) {
+      return `${ageMonth} ${ageMonth === 1 ? 'mês' : 'meses'}`;
+    }
+    return `${age} ${age === 1 ? 'ano' : 'anos'}`;
+  };
   const [showDetails, setShowDetails] = useState(false);
   const [isEditAnimalOpen, setIsEditAnimalOpen] = useState(false);
   const { supabase } = useSupabase();
@@ -202,7 +210,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
           
           <div className="text-gray-500 text-sm space-y-1 mb-4">
             <p>{breedUpdated || 'SRD'}</p>
-            <p>{ageUpdated} • {genderUpdated === 'male' ? 'Macho' : 'Fêmea'}</p>
+            <p>{formatAge()} • {genderUpdated === 'male' ? 'Macho' : 'Fêmea'}</p>
             <p>
               Porte: {
                 sizeUpdated === 'small' ? 'Pequeno' :
@@ -262,12 +270,14 @@ const AnimalCard: React.FC<AnimalProps> = ({
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Idade</label>
+                    <label className="block text-sm font-medium mb-1">Idade (anos)</label>
                     <input 
+                      type="number"
+                      min="0"
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Ex: 2 anos"
+                      placeholder="Ex: 2"
                       value={ageUpdated}
-                      onChange={(e) => setAgeUpdated(e.target.value)}
+                      onChange={(e) => setAgeUpdated(parseInt(e.target.value) || 0)}
                       required
                     />
                   </div>
@@ -435,7 +445,7 @@ const AnimalCard: React.FC<AnimalProps> = ({
               </div>
               <div className="bg-gray-50 p-3 rounded">
                 <p className="text-sm text-gray-500">Idade</p>
-                <p className="font-medium">{age}</p>
+                <p className="font-medium">{formatAge()}</p>
               </div>
               <div className="bg-gray-50 p-3 rounded">
                 <p className="text-sm text-gray-500">Sexo</p>

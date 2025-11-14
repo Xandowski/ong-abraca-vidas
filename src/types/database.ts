@@ -4,7 +4,8 @@ export interface Animal {
   name: string
   type: 'cat' | 'dog' | 'other'
   breed?: string
-  age: string
+  age: number
+  ageMonth?: number | null
   gender: 'male' | 'female'
   size: 'small' | 'medium' | 'large'
   imageUrl?: string[];
