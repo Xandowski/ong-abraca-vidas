@@ -41,8 +41,8 @@ export function NavbarAuth() {
           size="lg" 
           className="hover:bg-transparent hover:text-ong-primary"
         >
-          <Lock className='hover:cursor-pointer h-5 w-5' aria-hidden="true" />
-          <span className="hidden sm:inline ml-1">Senha</span>
+          <Lock className='h-5 w-5' aria-hidden="true" />
+          <span className="hidden md:inline ml-1">Senha</span>
         </Button>
       </Link>
 
@@ -54,8 +54,8 @@ export function NavbarAuth() {
         onClick={handleLogout}
         aria-label="Sair da conta"
       >
-        <LogOut className='hover:cursor-pointer h-5 w-5' aria-hidden="true" />
-        <span className="hidden sm:inline ml-1">Sair</span>
+        <LogOut className='h-5 w-5' aria-hidden="true" />
+        <span className="hidden md:inline ml-1">Sair</span>
       </Button>
     </div>
   );

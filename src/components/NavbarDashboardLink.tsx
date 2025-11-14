@@ -18,8 +18,8 @@ export function NavbarDashboardLink() {
         size="lg" 
         className="hover:bg-transparent hover:text-ong-primary"
       >
-        <LayoutDashboard className='hover:cursor-pointer h-5 w-5' aria-hidden="true" />
-        <span className="hidden sm:inline ml-1">Dashboard</span>
+        <LayoutDashboard className='h-5 w-5' aria-hidden="true" />
+        <span className="hidden md:inline ml-1">Dashboard</span>
       </Button>
     </Link>
   );

@@ -16,27 +16,34 @@ export default function Navbar() {
         </Link>
         
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/animais" className="text-gray-700 hover:text-ong-primary transition-colors">
-            Adotar
-          </Link>
-          <a href="/#about" className="text-gray-700 hover:text-ong-primary transition-colors">
-            Sobre
-          </a>
-          <a href="/#contact" className="text-gray-700 hover:text-ong-primary transition-colors">
-            Contato
-          </a>
+          {/* Navegação pública */}
+          <div className="flex items-center gap-4">
+            <Link href="/animais" className="text-gray-700 hover:text-ong-primary transition-colors">
+              Adotar
+            </Link>
+            <a href="/#about" className="text-gray-700 hover:text-ong-primary transition-colors">
+              Sobre
+            </a>
+            <a href="/#contact" className="text-gray-700 hover:text-ong-primary transition-colors">
+              Contato
+            </a>
+          </div>
           
-          <Suspense fallback={null}>
-            <NavbarDashboardLink />
-          </Suspense>
-          
+          {/* CTA Apoiar (público) */}
           <Suspense fallback={null}>
             <PixSupport />
           </Suspense>
+          
+          {/* Área administrativa (condicional) */}
+          <div className="flex items-center gap-2">
+            <Suspense fallback={null}>
+              <NavbarDashboardLink />
+            </Suspense>
 
-          <Suspense fallback={null}>
-            <NavbarAuth />
-          </Suspense>
+            <Suspense fallback={null}>
+              <NavbarAuth />
+            </Suspense>
+          </div>
         </div>
 
         <Suspense fallback={null}>
