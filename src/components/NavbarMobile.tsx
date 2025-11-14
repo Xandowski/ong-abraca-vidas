@@ -95,20 +95,22 @@ export function NavbarMobile() {
                 </a>
               </li>
               
+              {/* Apoiar via Pix (sempre visível, após links públicos) */}
+              {!isHomePage && (
+                <li className="pt-2">
+                  <PixSupport />
+                </li>
+              )}
+              
               {/* Separador visual entre público e admin */}
               <li className="border-t border-gray-200 my-2" aria-hidden="true" />
               
               <li onClick={() => setIsMenuOpen(false)}>
                 <NavbarDashboardLink />
               </li>
-              <li>
+              <li onClick={() => setIsMenuOpen(false)}>
                 <NavbarAuth />
               </li>
-              {!isHomePage && (
-                <li className="pt-2">
-                  <PixSupport />
-                </li>
-              )}
             </ul>
           </nav>
         </>

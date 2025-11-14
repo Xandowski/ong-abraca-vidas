@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from '@/components/ui/button';
 import { useSupabase } from '@/hooks/useSupabase';
 import { Lock, LogOut } from 'lucide-react';
 import Link from 'next/link';
@@ -33,30 +32,26 @@ export function NavbarAuth() {
   if (!session) return null;
 
   return (
-    <div className="flex items-center gap-2">
-      {/* Botão Alterar Senha */}
-      <Link href="/dashboard/alterar-senha" aria-label="Alterar senha">
-        <Button 
-          variant="ghost" 
-          size="lg" 
-          className="hover:bg-transparent hover:text-ong-primary"
-        >
-          <Lock className='h-5 w-5' aria-hidden="true" />
-          <span className="ml-1">Senha</span>
-        </Button>
+    <div className="flex items-center gap-1">
+      {/* Link Alterar Senha */}
+      <Link 
+        href="/dashboard/alterar-senha" 
+        className="text-gray-700 hover:text-ong-primary py-2 transition-colors flex items-center gap-2"
+        aria-label="Alterar senha"
+      >
+        <Lock className='h-5 w-5' aria-hidden="true" />
+        <span>Senha</span>
       </Link>
 
       {/* Botão Logout */}
-      <Button 
-        variant="ghost" 
-        size="lg" 
-        className="hover:bg-transparent hover:text-red-500"
+      <button
         onClick={handleLogout}
+        className="text-gray-700 hover:text-red-500 py-2 transition-colors flex items-center gap-2"
         aria-label="Sair da conta"
       >
         <LogOut className='h-5 w-5' aria-hidden="true" />
-        <span className="ml-1">Sair</span>
-      </Button>
+        <span>Sair</span>
+      </button>
     </div>
   );
 }
