@@ -63,6 +63,10 @@ const AnimalCard: React.FC<AnimalProps> = ({
   const [sizeUpdated, setSizeUpdated] = useState(size);
   const [descriptionUpdated, setDescriptionUpdated] = useState(description);
   const [ageUpdated, setAgeUpdated] = useState(age);
+  const [ageMonthUpdated, setAgeMonthUpdated] = useState(ageMonth || null);
+  const [ageUnitUpdated, setAgeUnitUpdated] = useState<'years' | 'months'>(
+    age === 0 && ageMonth ? 'months' : 'years'
+  );
   const [breedUpdated, setBreedUpdated] = useState(breed);
   const [imageUrlUpdated, setImageUrlUpdated] = useState<string[]>(imageUrl || []);
   const [filesUpdated, setFilesUpdated] = useState<File[]>([]);
@@ -126,11 +130,25 @@ const AnimalCard: React.FC<AnimalProps> = ({
       const imageUrls = await uploadImages(filesUpdated);
       const allImages = [...imageUrlUpdated, ...imageUrls];
       setImageUrlUpdated(allImages);
+      
+      // Determina age e ageMonth baseado na unidade selecionada
+      let finalAge: number;
+      let finalAgeMonth: number | null;
+      
+      if (ageUnitUpdated === 'months') {
+        finalAge = 0;
+        finalAgeMonth = ageUpdated;
+      } else {
+        finalAge = ageUpdated;
+        finalAgeMonth = null;
+      }
+      
       const animal = {
         name: nameUpdated,
         type: typeUpdated,
         breed: breedUpdated,
-        age: ageUpdated,
+        age: finalAge,
+        ageMonth: finalAgeMonth,
         gender: genderUpdated,
         isAdopted: isAdoptedUpdated,
         description: descriptionUpdated,
@@ -168,6 +186,32 @@ const AnimalCard: React.FC<AnimalProps> = ({
       setCarouselImages(imageUrl);
     }
   },[imageUrl]);
+
+  // Sincroniza estados quando o modal de edição abrir
+  useEffect(() => {
+    if (isEditAnimalOpen) {
+      setNameUpdated(name);
+      setTypeUpdated(type);
+      setGenderUpdated(gender);
+      setSizeUpdated(size);
+      setDescriptionUpdated(description);
+      setBreedUpdated(breed);
+      setIsAdoptedUpdated(isAdopted);
+      setImageUrlUpdated(imageUrl || []);
+      setFilesUpdated([]);
+      
+      // Configurar idade corretamente
+      if (age === 0 && ageMonth) {
+        setAgeUnitUpdated('months');
+        setAgeUpdated(ageMonth);
+        setAgeMonthUpdated(ageMonth);
+      } else {
+        setAgeUnitUpdated('years');
+        setAgeUpdated(age);
+        setAgeMonthUpdated(null);
+      }
+    }
+  }, [isEditAnimalOpen, name, type, gender, size, description, breed, isAdopted, imageUrl, age, ageMonth]);
 
   return (
     <>
@@ -270,16 +314,58 @@ const AnimalCard: React.FC<AnimalProps> = ({
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Idade (anos)</label>
+                    <label className="block text-sm font-medium mb-1">Idade</label>
+                    <div className="flex gap-4 mb-2">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="ageUnitUpdated"
+                          value="years"
+                          checked={ageUnitUpdated === 'years'}
+                          onChange={(e) => {
+                            setAgeUnitUpdated('years');
+                            // Converter de meses para anos se necessário
+                            if (ageMonthUpdated) {
+                              setAgeUpdated(Math.floor(ageMonthUpdated / 12));
+                            }
+                          }}
+                          className="cursor-pointer"
+                        />
+                        <span className="text-sm">Anos</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="ageUnitUpdated"
+                          value="months"
+                          checked={ageUnitUpdated === 'months'}
+                          onChange={(e) => {
+                            setAgeUnitUpdated('months');
+                            // Manter o valor em meses se já está configurado
+                            if (ageUpdated > 0 && !ageMonthUpdated) {
+                              setAgeUpdated(ageUpdated * 12);
+                            }
+                          }}
+                          className="cursor-pointer"
+                        />
+                        <span className="text-sm">Meses</span>
+                      </label>
+                    </div>
                     <input 
                       type="number"
                       min="0"
+                      max={ageUnitUpdated === 'months' ? 11 : undefined}
                       className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      placeholder="Ex: 2"
+                      placeholder={ageUnitUpdated === 'months' ? 'Ex: 6' : 'Ex: 2'}
                       value={ageUpdated}
                       onChange={(e) => setAgeUpdated(parseInt(e.target.value) || 0)}
                       required
                     />
+                    {ageUnitUpdated === 'months' && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Para animais com menos de 1 ano
+                      </p>
+                    )}
                   </div>
                   
                   <div>
