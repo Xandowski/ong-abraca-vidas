@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import AnimalCard from '@/components/AnimalCard';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
